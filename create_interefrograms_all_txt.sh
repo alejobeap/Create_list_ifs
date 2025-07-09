@@ -6,6 +6,11 @@ OUTPUT_FILE="combination_all.txt"
 OUTPUT_FILE_1="combination_longs.txt"
 OUTPUT_FILE_2="combination_shorts.txt"
 
+# Step 3: Remove listarslc.txt if it exists
+[ -f listarslc.txt ] && rm listarslc.txt
+
+# Step 4: List files in RSLC directory and save to listarslc.txt
+ls RSLC -1 >> listarslc.txt
 
 # Ensure the input file exists
 if [ ! -f "$INPUT_FILE" ]; then

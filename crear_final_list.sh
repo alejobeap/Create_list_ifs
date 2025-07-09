@@ -5,7 +5,7 @@
 #else
 #    mkdir GEOC
 #fi
-
+scp -r GEOC/geo/* GEOC/
 # Define file names
 file1="standar_list.txt"
 file2="Longs_combination_longs.txt"

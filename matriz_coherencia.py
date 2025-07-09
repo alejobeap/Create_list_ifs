@@ -95,7 +95,7 @@ print(f"Imagen guardada como {output_file}")
 nifgs=0
 # Rellenar la matriz con los valores de coherencia
 for _, row in df.iterrows():
-    if row["coherence"]>0.4: #mean_value:
+    if row["coherence"]>mean_value:
       i = unique_dates1.index(row["date1"])
       j = unique_dates2.index(row["date2"])
       matrix_filt[i, j] = row["coherence"]

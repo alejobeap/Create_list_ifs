@@ -41,8 +41,8 @@ do
   fi
 
   # Check threshold condition using mean_value
-#  awk -v val="$col2" -v threshold="$mean_value" 'BEGIN{if(val > threshold) exit 0; else exit 1}'
-  awk -v val="$col2" -v threshold=0.4 'BEGIN{if(val > threshold) exit 0; else exit 1}'
+  awk -v val="$col2" -v threshold="$mean_value" 'BEGIN{if(val > threshold) exit 0; else exit 1}'
+#  awk -v val="$col2" -v threshold=0.4 'BEGIN{if(val > threshold) exit 0; else exit 1}'
   if [[ $? -eq 0 ]]; then
     # Extract first column and append to output file
     echo "$line" | awk '{print $1}' >> "$output_file"

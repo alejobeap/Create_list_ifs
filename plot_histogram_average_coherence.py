@@ -35,7 +35,7 @@ print(f"Standard Deviation: {std_value:.4f}")
 plt.figure(figsize=(8, 6))
 plt.hist(data_values, bins=15, color='blue', alpha=0.7, edgecolor='black')
 plt.axvline(mean_value, color='red', linestyle='dashed', linewidth=1.5, label=f'Mean: {mean_value:.4f}')
-plt.axvline(0.4, color='red', linestyle='dashed', linewidth=1.5, label='Mean: 0.4')
+#plt.axvline(0.4, color='red', linestyle='dashed', linewidth=1.5, label='Mean: 0.4')
 
 plt.title('Histogram of longs IFS')
 plt.xlabel('Value')

@@ -79,7 +79,7 @@ def crop_and_calculate_average(file_path_cc, file_path_hgt, volcano_lon, volcano
             plt.title(f"Recorte {file_path_cc.stem}")
             output_img = file_path_cc.parent / f"recorte_masked_{file_path_cc.stem}.png"
             plt.savefig(output_img, dpi=50)
-            print(f"Imagen de coherencia recortada guardada: {output_img.name}")1
+            print(f"Imagen de coherencia recortada guardada: {output_img.name}")
             #plt.figure(figsize=(8, 6))
             #plt.imshow(index_h/np.nanmax(data_cc), cmap='viridis')
             #plt.colorbar(label='Avg_Coh')

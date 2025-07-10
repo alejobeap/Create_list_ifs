@@ -1,9 +1,9 @@
 import sys
 import numpy as np
-import matplotlib.pyplot as plt
 import rasterio
-from rasterio.windows import from_bounds
+import matplotlib.pyplot as plt
 from pathlib import Path
+from rasterio.windows import from_bounds
 import glob
 
 # Archivos de entrada y salida
@@ -13,103 +13,117 @@ output_txt = "output_averages_from_cc_tifs.txt"
 output_txt_std = "output_std_from_cc_tifs.txt"
 
 def get_volcano_info(volcano_name, volcanoes_file):
-    """Obtiene la información de un volcán específico del archivo."""
     try:
         with open(volcanoes_file, "r") as vf:
             for line in vf:
-                if line.strip() == "" or line.startswith("#"):
-                    continue
-                nombre_volcan, lon, lat, distancia = line.split()
+                nombre_volcan, lon, lat, distancia = line.strip().split()
                 if nombre_volcan.lower() == volcano_name.lower():
                     return nombre_volcan, float(lon), float(lat), float(distancia)
     except Exception as e:
         print(f"Error leyendo el archivo de volcanes: {e}")
     return None
 
-def find_hgt_file():
-    """Busca el archivo .geo.hgt.tif en GEOC o GEOC/geo."""
-    paths = glob.glob("GEOC/*.geo.hgt.tif") + glob.glob("GEOC/geo/*.geo.hgt.tif")
-    if not paths:
-        print("No se encontró ningún archivo .geo.hgt.tif.")
-        return None
-    return Path(paths[0])  # Suponemos que solo hay uno por volcán
-
-def crop_and_calculate_average(file_path_cc, file_path_hgt, volcano_lon, volcano_lat, save_image=False):
+def get_cima_to_base_mask(lon, lat, buffer_deg=0.2):
+    """Crea una máscara desde la cima hasta la base del volcán (zonas más bajas)."""
     try:
-        with rasterio.open(file_path_cc) as src_cc, rasterio.open(file_path_hgt) as src_hgt:
-            print(f"\nProcesando archivo: {file_path_cc.name}")
+        hgt_files = glob.glob("GEOC/*.geo.hgt.tif") + glob.glob("GEOC/geo/*.geo.hgt.tif")
+        if not hgt_files:
+            raise FileNotFoundError("No se encontraron archivos .geo.hgt.tif")
 
-            data_cc = src_cc.read(1).astype(float)
-            data_hgt = src_hgt.read(1).astype(float)
+        hgt_path = hgt_files[0]
+        with rasterio.open(hgt_path) as src:
+            min_lon = lon - buffer_deg
+            max_lon = lon + buffer_deg
+            min_lat = lat - buffer_deg
+            max_lat = lat + buffer_deg
 
-            nodata_mask = (data_cc == src_cc.nodata) | (data_hgt == src_hgt.nodata)
-            data_cc[nodata_mask] = np.nan
-            data_hgt[nodata_mask] = np.nan
+            window = from_bounds(min_lon, min_lat, max_lon, max_lat, src.transform)
+            elevation = src.read(1, window=window)
+            elevation = np.where(elevation == src.nodata, np.nan, elevation)
 
-            # Obtener altura de la cumbre
-            fila, columna = src_hgt.index(volcano_lon, volcano_lat)
-            altura_cumbre = data_hgt[fila, columna]
-            altura_pie = np.nanmin(data_hgt)
+            # Obtener índice relativo dentro de la ventana
+            row_cima, col_cima = src.index(lon, lat)
+            row_min, col_min = src.index(min_lon, max_lat)
+            rel_row = row_cima - row_min
+            rel_col = col_cima - col_min
 
-            print(f"Altura de la cumbre: {altura_cumbre:.2f} m")
-            print(f"Altura del pie: {altura_pie:.2f} m")
-
-            # Crear máscara desde la base hasta la cumbre
-            index_h = (data_hgt >= altura_pie) & (data_hgt <= altura_cumbre)
-
-            # Calcular coherencia normalizada solo en esa zona
-            if np.nanmax(data_cc) > 0:
-                c_high = data_cc[index_h] / np.nanmax(data_cc)
+            if (0 <= rel_row < elevation.shape[0]) and (0 <= rel_col < elevation.shape[1]):
+                h_cima = elevation[rel_row, rel_col]
+                if np.isnan(h_cima):
+                    raise ValueError("La elevación en la cima es NaN")
             else:
-                c_high = data_cc[index_h]
+                raise ValueError("Coordenadas de la cima fuera del rango de la ventana")
 
-            average = np.nanmean(c_high)
-            standar = np.nanstd(c_high)
+            h_base = np.nanpercentile(elevation, 10)
+            mask = (elevation <= h_cima) & (elevation >= h_base)
+
+            print(f"Archivo HGT usado: {hgt_path}")
+            print(f"Cima: {h_cima:.1f} m, Base (P10): {h_base:.1f} m")
+            print(f"Píxeles válidos en máscara: {np.sum(mask)}")
+
+            return mask, window, hgt_path
+    except Exception as e:
+        print(f"Error procesando elevación: {e}")
+        return None, None, None
+
+def crop_and_calculate_average(file_path, window, mask, save_image=False):
+    try:
+        with rasterio.open(file_path) as src:
+            data = src.read(1, window=window)
+            data = np.where(data == src.nodata, np.nan, data)
+
+            if data.shape != mask.shape:
+                print(f"Shape mismatch: data {data.shape}, mask {mask.shape}")
+                return None, None
+
+            masked_data = data[mask]
+
+            if masked_data.size == 0 or np.all(np.isnan(masked_data)):
+                print(f"Advertencia: No hay datos válidos en {file_path.name}")
+                return None, None
+
+            norm_factor = np.nanmax(masked_data)
+            if np.isnan(norm_factor) or norm_factor == 0:
+                print(f"Advertencia: np.nanmax es inválido o cero en {file_path.name}")
+                return None, None
+
+            masked_data = masked_data / norm_factor
+            average = np.nanmean(masked_data)
+            standar = np.nanstd(masked_data)
 
             if save_image:
                 plt.figure(figsize=(8, 6))
-                plt.imshow(index_h, cmap='gray')
-                plt.title(f"Zona: {altura_pie:.0f}m - {altura_cumbre:.0f}m")
-                plt.savefig(f"zonas_cumbre_a_base_{file_path_cc.stem}.png", dpi=100)
+                vis_data = np.full_like(data, np.nan)
+                vis_data[mask] = masked_data
+                plt.imshow(vis_data, cmap='viridis')
+                plt.colorbar(label='Avg_Coh')
+                plt.title(f"{file_path.stem} Avg_Coh: {average:.3f}")
+                plt.savefig(f"{file_path.parent}/recorte_{file_path.stem}.png", dpi=100)
+                plt.close()
 
-
-            plt.figure(figsize=(8, 6))
-            plt.imshow(cc_normalized, cmap='viridis')
-            plt.colorbar(label='Avg_Coh (normalized)')
-            plt.title(f"Recorte {file_path_cc.stem}")
-            output_img = file_path_cc.parent / f"recorte_masked_{file_path_cc.stem}.png"
-            plt.savefig(output_img, dpi=50)
-            print(f"Imagen de coherencia recortada guardada: {output_img.name}")
-            #plt.figure(figsize=(8, 6))
-            #plt.imshow(index_h/np.nanmax(data_cc), cmap='viridis')
-            #plt.colorbar(label='Avg_Coh')
-            #plt.title(f"Clip Area {file_path_cc.stem} Avg_Coh:{average}")
-            #plt.savefig(f"{file_path_cc.parent}/recorte_{file_path_cc.stem}.png",dpi=50)
-            #print(f"Imagen recortada guardada como recorte_{file_path_cc.stem}.png")
-
-            print("Promedio:", average, "Desviación estándar:", standar)
             return average, standar
-
     except Exception as e:
-        print(f"Error procesando archivos: {e}")
+        print(f"Error procesando {file_path}: {e}")
         return None, None
 
 def main():
     if len(sys.argv) < 2:
-        print("Uso: python script.py <Nombre_volcan>")
+        print("Uso: python Estimate_Coherence_Average_from_DEM.py <Nombre_volcan>")
         return
 
     volcano_name = sys.argv[1]
     volcano_info = get_volcano_info(volcano_name, volcanoes_file)
+
     if not volcano_info:
-        print(f"Volcán '{volcano_name}' no encontrado en {volcanoes_file}.")
+        print(f"Volcán '{volcano_name}' no encontrado.")
         return
 
     nombre_volcan, lon, lat, distancia = volcano_info
-    print(f"Procesando volcán: {nombre_volcan} ({lon}, {lat})")
+    print(f"\n--- Procesando volcán: {nombre_volcan} en ({lon}, {lat}) ---\n")
 
-    hgt_file = find_hgt_file()
-    if not hgt_file:
+    mask, window, hgt_used = get_cima_to_base_mask(lon, lat)
+    if mask is None:
+        print("No se pudo generar máscara de elevación.")
         return
 
     with open(input_txt, "r") as f:
@@ -119,19 +133,20 @@ def main():
     resultsstd = []
 
     for i, date_path in enumerate(date_paths):
-        file_path_cc = Path(f"GEOC/{date_path}/{date_path}.geo.cc.tif")
-        if not file_path_cc.exists():
-            print(f"Archivo no encontrado: {file_path_cc}")
+        file_path = Path(f"GEOC/{date_path}/{date_path}.geo.cc.tif")
+        if not file_path.exists():
+            print(f"Archivo no encontrado: {file_path}")
             continue
 
         save_image = (i == 0)
-        average, standar = crop_and_calculate_average(file_path_cc, hgt_file, lon, lat, save_image=save_image)
+        average, standar = crop_and_calculate_average(file_path, window, mask, save_image=save_image)
 
         if average is not None:
             results.append({"date": date_path, "average": average})
             resultsstd.append({"date": date_path, "standar": standar})
+        else:
+            print(f"Sin resultado válido para {date_path}")
 
-    # Guardar resultados
     with open(output_txt, "w") as f:
         for result in results:
             f.write(f"{result['date']} {result['average']:.4f}\n")

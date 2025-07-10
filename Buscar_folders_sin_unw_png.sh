@@ -9,8 +9,8 @@ output_file="listaunwpng.txt"
 # Limpiar el archivo de salida si existe
 : > "$output_file"
 
-# Solo carpetas de primer nivel dentro de GEOC
-for dir in "$base_dir"/*/; do
+# Solo carpetas de primer nivel dentro de GEOC que empiezan con '2'
+for dir in "$base_dir"/2*/; do
     # Verifica si es un directorio
     [ -d "$dir" ] || continue
 

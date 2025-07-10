@@ -72,6 +72,13 @@ def crop_and_calculate_average(file_path_cc, file_path_hgt, volcano_lon, volcano
                 plt.title(f"Zona: {altura_pie:.0f}m - {altura_cumbre:.0f}m")
                 plt.savefig(f"zonas_cumbre_a_base_{file_path_cc.stem}.png", dpi=100)
 
+            plt.figure(figsize=(8, 6))
+            plt.imshow(index_h/np.nanmax(data_cc), cmap='viridis')
+            plt.colorbar(label='Avg_Coh')
+            plt.title(f"Clip Area {file_path_cc.stem} Avg_Coh:{average}")
+            plt.savefig(f"{file_path_cc.parent}/recorte_{file_path_cc.stem}.png",dpi=50)
+            print(f"Imagen recortada guardada como recorte_{file_path_cc.stem}.png")
+
             print("Promedio:", average, "Desviación estándar:", standar)
             return average, standar
 

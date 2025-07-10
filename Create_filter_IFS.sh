@@ -24,6 +24,6 @@ current_dir=$(basename "$(pwd)")
 
 echo "framebatch_gapfill.sh -l -N -I /work/scratch-pw3/licsar/alejobea/batchdir/${parent_dir}/${current_dir}/combination_shorts.txt 5 480 7 2"
 
-framebatch_gapfill.sh -l -N -I /work/scratch-pw3/licsar/alejobea/batchdir/${parent_dir}/${current_dir}/combination_shorts.txt -o 5 480 7 2
+framebatch_gapfill.sh -N -l -I /work/scratch-pw3/licsar/alejobea/batchdir/${parent_dir}/${current_dir}/combination_shorts.txt -o 5 480 7 2
 
 

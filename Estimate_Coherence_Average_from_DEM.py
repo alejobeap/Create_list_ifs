@@ -101,6 +101,15 @@ def crop_and_calculate_average(file_path, window, mask, save_image=False):
                 plt.savefig(f"{file_path.parent}/recorte_{file_path.stem}.png", dpi=100)
                 plt.close()
 
+            plt.figure(figsize=(8, 6))
+            vis_data = np.full_like(data, np.nan)
+            vis_data[mask] = masked_data
+            plt.imshow(vis_data/np.nanmax(vis_data), cmap='viridis')
+            plt.colorbar(label='Avg_Coh')
+            plt.title(f"{file_path.stem} Avg_Coh: {average:.3f}")
+            plt.savefig(f"{file_path.parent}/recorte_{file_path.stem}.png", dpi=100)
+            plt.close()
+
             return average, standar
     except Exception as e:
         print(f"Error procesando {file_path}: {e}")

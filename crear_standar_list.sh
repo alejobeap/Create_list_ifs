@@ -26,7 +26,7 @@ mapfile -t lines < "$INPUT_FILE"
 
 # Loop over lines and create combinations (up to next 4 lines)
 for ((i=0; i<${#lines[@]}; i++)); do
-    for ((j=i+2; j<i+6 && j<${#lines[@]}; j++)); do
+    for ((j=i+2; j<i+4 && j<${#lines[@]}; j++)); do
         echo "${lines[i]}_${lines[j]}" >> "$OUTPUT_FILE_2"
     done
 done

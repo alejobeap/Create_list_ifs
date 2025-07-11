@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from rasterio.windows import from_bounds
 import glob
+import os
 
 # Archivos de entrada y salida
 volcanoes_file = "Volcanes_Chiles.txt"
@@ -116,11 +117,32 @@ def crop_and_calculate_average(file_path, window, mask, save_image=False):
         return None, None
 
 def main():
-    if len(sys.argv) < 2:
-        print("Uso: python Estimate_Coherence_Average_from_DEM.py <Nombre_volcan>")
-        return
 
-    volcano_name = sys.argv[1]
+    # Obtener el directorio actual (como `pwd` en bash)
+    current_dir = os.getcwd()
+
+    # Obtener el nombre del directorio padre
+    #parent_dir = os.path.basename(os.path.dirname(current_dir))
+
+    default_volcano_name = os.path.basename(os.path.dirname(current_dir))
+
+    if len(sys.argv) < 2:
+        print(f"No se ingresó el nombre del volcán. Usando valor por defecto: {default_volcano_name}")
+        volcano_name = default_volcano_name
+    else:
+        volcano_name = sys.argv[1]
+
+    print(f"Nombre del volcán: {volcano_name}")
+
+
+    
+    #if len(sys.argv) < 2:
+    #    print("Uso: python Estimate_Coherence_Average_from_DEM.py <Nombre_volcan>")
+    #    return
+
+
+    
+    #volcano_name = sys.argv[1]
     volcano_info = get_volcano_info(volcano_name, volcanoes_file)
 
     if not volcano_info:

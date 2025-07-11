@@ -137,3 +137,56 @@ plt.savefig(output_file, dpi=100)
 plt.close()
 
 print(f"Imagen guardada como {output_file}")
+
+
+def extract_year(date_str):
+    # Extrae los 4 primeros dígitos como año
+    return int(date_str[:4])
+
+# Rango de años bianuales
+year_ranges = [(2014, 2016), (2016, 2018), (2018, 2020), (2020, 2022), (2022, 2024), (2024, 2026)]
+
+def plot_submatrices(matrix_data, title_prefix, output_prefix):
+    for matrix_type, matrix_name in zip([matrix, matrix_filt], ["full", "filtered"]):
+        fig, axes = plt.subplots(2, 3, figsize=(36, 24))  # 6 subplots en una sola figura
+        axes = axes.flatten()
+
+        for idx, (start_year, end_year) in enumerate(year_ranges):
+            ax = axes[idx]
+            
+            # Filtrar fechas dentro del rango
+            date1_indices = [i for i, d in enumerate(unique_dates1) if start_year <= extract_year(d) < end_year]
+            date2_indices = [j for j, d in enumerate(unique_dates2) if start_year <= extract_year(d) < end_year]
+
+            # Submatriz y etiquetas
+            if not date1_indices or not date2_indices:
+                ax.set_title(f"{start_year}-{end_year}\n(No data)")
+                ax.axis('off')
+                continue
+
+            submatrix = matrix_type[np.ix_(date1_indices, date2_indices)]
+            xticks = [unique_dates2[j] for j in date2_indices]
+            yticks = [unique_dates1[i] for i in date1_indices]
+
+            im = ax.imshow(submatrix, cmap=cmap, aspect="auto", origin="upper")
+            ax.set_title(f"{title_prefix} {start_year}-{end_year}")
+            ax.set_xticks(range(len(xticks)))
+            ax.set_xticklabels(xticks, rotation=90, fontsize=6)
+            ax.set_yticks(range(len(yticks)))
+            ax.set_yticklabels(yticks, fontsize=6)
+
+        # Agregar barra de color y guardar
+        fig.subplots_adjust(right=0.9)
+        cbar_ax = fig.add_axes([0.92, 0.15, 0.015, 0.7])
+        fig.colorbar(im, cax=cbar_ax, label="Coherence")
+
+        plt.tight_layout(rect=[0, 0, 0.9, 1])
+        output_file = f"{output_prefix}_{matrix_name}_{parent_dir}_{current_dir}.png"
+        plt.savefig(output_file, dpi=100)
+        plt.close()
+        print(f"Submatriz guardada como {output_file}")
+
+# Llamada a la función para graficar submatrices
+#plot_submatrices(matrix, "Coherence Matrix", "submatrix")
+plot_submatrices(matrix_filt, "Filtered Coherence Matrix", "filtered_submatrix")
+

@@ -30,6 +30,10 @@ else
     echo "Failed to create the output file."
 fi
 
+line_count=$(wc -l < "$output")
+echo "📄 Número total de combinaciones generadas: $line_count"
+
+
 parent_dir=$(basename "$(dirname "$(pwd)")")
 current_dir=$(basename "$(pwd)")
 

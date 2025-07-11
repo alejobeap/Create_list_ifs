@@ -30,3 +30,7 @@ for ((i=0; i<${#lines[@]}; i++)); do
         echo "${lines[i]}_${lines[j]}" >> "$OUTPUT_FILE_2"
     done
 done
+
+
+line_count=$(wc -l < "$OUTPUT_FILE_2")
+echo "📄 Número total de combinaciones generadas: $line_count"

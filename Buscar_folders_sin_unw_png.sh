@@ -55,3 +55,5 @@ cat "$archivo_otros" "$archivo_mayo_sep" > "$archivo"
 rm "$archivo_otros" "$archivo_mayo_sep"
 
 
+line_count=$(wc -l < "$archivo")
+echo "📄 Número total de combinaciones generadas: $line_count"

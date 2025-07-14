@@ -15,11 +15,6 @@ month_diff() {
     echo $(((end_year - start_year) * 12 + (end_month - start_month)))
 }
 
-# Function to check if the month difference is valid
-is_valid_diff_months() {
-    local diff="$1"
-    [[ "$diff" -eq 6 || "$diff" -eq 9 || "$diff" -eq 12 || "$diff" -eq 15 ]]
-}
 
 # Function to exclude dates in June through September
 is_excluded_month() {
@@ -60,11 +55,9 @@ for ((i=0; i<${#lines[@]}; i++)); do
             continue
         fi
         
-        # Calculate month difference and validate it
-        diff=$(month_diff "$date1" "$date2")
-        if is_valid_diff_months "$diff"; then
-            echo "${date1}_${date2}" >> "$OUTPUT_FILE_2"
-        fi
+
+        echo "${date1}_${date2}" >> "$OUTPUT_FILE_2"
+    
     done
 done
 

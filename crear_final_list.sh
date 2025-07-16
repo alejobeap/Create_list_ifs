@@ -4,7 +4,7 @@ scp -r GEOC/geo/* GEOC/
 file1="standar_list.txt"
 file2="Longs_combination_longs.txt"
 output="IFSforLiCSBAS.txt"
-Chileborrar="y"
+Chileborrar="n"
 
 # Check if both input files exist
 if [[ ! -f $file1 || ! -f $file2 ]]; then

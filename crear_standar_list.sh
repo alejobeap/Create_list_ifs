@@ -3,6 +3,7 @@
 # File containing the list of dates (one date per line in YYYYMMDD format)
 INPUT_FILE="listarslc.txt"
 OUTPUT_FILE_2="standar_list.txt"
+Chilescase = "y"
 
 # Function to calculate difference in months
 month_diff() {
@@ -16,16 +17,24 @@ month_diff() {
 }
 
 
-# Function to exclude dates in June through September
+# Function to check if a date falls in the excluded months (June to September)
+# Only applies the check if Chilescase == "y"
+# Returns 0 if excluded, 1 if not excluded
 is_excluded_month() {
     local date="$1"
-    local month=$((10#${date:4:2}))
-    if ((month >= 6 && month <= 9)); then
-        return 0  # Exclude
+    local month=$((10#${date:4:2}))  # Extract month, force base 10 to avoid leading zeros issues
+
+    if [[ "$Chilescase" == "y" ]]; then
+        if (( month >= 6 && month <= 9 )); then
+            return 0  # Excluded
+        else
+            return 1  # Not excluded
+        fi
     else
-        return 1  # Allow
+        return 1  # Not excluded if Chilescase != "y"
     fi
 }
+
 
 # Ensure the input file exists
 if [ ! -f "$INPUT_FILE" ]; then

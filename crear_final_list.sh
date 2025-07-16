@@ -4,6 +4,7 @@ scp -r GEOC/geo/* GEOC/
 file1="standar_list.txt"
 file2="Longs_combination_longs.txt"
 output="IFSforLiCSBAS.txt"
+Chileborrar="y"
 
 # Check if both input files exist
 if [[ ! -f $file1 || ! -f $file2 ]]; then
@@ -53,6 +54,14 @@ if [[ -f $output ]]; then
 else
     echo "Failed to create the output file."
 fi
+
+if chileborrar=="y"; then
+    echo "Delete remaining months for Chile area for avoid unwrapping time"
+    rm -rf GEOC/20*06*_* GEOC/20*08*_* GEOC/20*08*_* GEOC/20*09*_* GEOC/20*10*_*
+fi
+
+echo "Delete empty folders in GEOC"
+./deletefolder_GEOC.sh
 
 line_count=$(wc -l < "$output")
 echo "📄 Número total de combinaciones generadas: $line_count"

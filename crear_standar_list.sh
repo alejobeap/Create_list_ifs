@@ -19,10 +19,15 @@ month_diff() {
 
 # Function to check if a date falls in the excluded months (June to September)
 # Only applies the check if Chilescase == "y"
-# Returns 0 if excluded, 1 if not excluded
+# Defaults Chilescase to "n" if undefined or invalid
 is_excluded_month() {
     local date="$1"
-    local month=$((10#${date:4:2}))  # Extract month, force base 10 to avoid leading zeros issues
+    local month=$((10#${date:4:2}))  # Extract the month from date
+
+    # Default Chilescase to "n" if not "y" or "n"
+    if [[ "$Chilescase" != "y" && "$Chilescase" != "n" ]]; then
+        Chilescase="n"
+    fi
 
     if [[ "$Chilescase" == "y" ]]; then
         if (( month >= 6 && month <= 9 )); then
@@ -31,7 +36,7 @@ is_excluded_month() {
             return 1  # Not excluded
         fi
     else
-        return 1  # Not excluded if Chilescase != "y"
+        return 1  # Not excluded
     fi
 }
 

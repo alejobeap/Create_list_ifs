@@ -3,7 +3,7 @@
 # File containing the list of dates (one date per line in YYYYMMDD format)
 INPUT_FILE="listarslc.txt"
 OUTPUT_FILE_2="standar_list.txt"
-Chilescase = "y"
+Chilescase = "n"
 
 # Function to calculate difference in months
 month_diff() {

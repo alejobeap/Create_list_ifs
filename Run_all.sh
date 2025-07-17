@@ -1,10 +1,12 @@
 #!/bin/bash
 
-gapfill=0
+gapfill=$1
 
-if [[ "$gapfill" != 1 && "$gapfill" != 0 ]]; then
-        gapfill=0
+# Si gapfill no es 1 ni 0, o está vacío, lo asignamos a 0
+if [[ "$gapfill" != "1" && "$gapfill" != "0" ]]; then
+    gapfill=0
 fi
+
 
 if [[ "$gapfill" == 1 ]]; then
        ./Gap_fill_licsar_make_frame.sh

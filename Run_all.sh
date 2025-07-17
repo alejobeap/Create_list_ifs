@@ -8,7 +8,7 @@ echo "Create wrap and cc for shorters connections (2 for each epoch)"
 
 # Ejecutar el resto tras 2 horas sin bloquear la terminal
 (
-  sleep 7200
+  sleep 9200
   echo "Estimated the average coherence"
   python Estimate_Coherence_Average_from_DEM.py
   ./filtered_average.sh

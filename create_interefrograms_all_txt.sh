@@ -16,22 +16,6 @@ if [ ! -f "$INPUT_FILE" ]; then
     exit 1
 fi
 
-# Clear the output file
-if [ -f "$OUTPUT_FILE" ]; then
-    echo "Output file $OUTPUT_FILE found. Erasing!"
-    > "$OUTPUT_FILE"
-else
-    > "$OUTPUT_FILE"
-fi
-
-
-# Clear the output file
-if [ -f "$OUTPUT_FILE_1" ]; then
-    echo "Output file $OUTPUT_FILE_1 found. Erasing!"
-    > "$OUTPUT_FILE_1"
-else
-    > "$OUTPUT_FILE_1"
-fi
 
 # Clear the output file
 if [ -f "$OUTPUT_FILE_2" ]; then

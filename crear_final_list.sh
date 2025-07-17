@@ -4,7 +4,7 @@ scp -r GEOC/geo/* GEOC/
 file1="standar_list.txt"
 file2="Longs_combination_longs.txt"
 output="IFSforLiCSBAS.txt"
-Chilecase=0
+Chilescase=0
 
 # Check if both input files exist
 if [[ ! -f $file1 || ! -f $file2 ]]; then
@@ -54,6 +54,7 @@ if [[ "$Chilescase" == 1 ]]; then
 
 # Limpiar archivos temporales
   rm "$archivo_otros" "$archivo_mayo_sep"
+fi
 
 # Check if the output file was created
 if [[ -f $output ]]; then

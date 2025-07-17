@@ -4,7 +4,7 @@ scp -r GEOC/geo/* GEOC/
 file1="standar_list.txt"
 file2="Longs_combination_longs.txt"
 output="IFSforLiCSBAS.txt"
-Chileborrar="n"
+Chilecase=0
 
 # Check if both input files exist
 if [[ ! -f $file1 || ! -f $file2 ]]; then
@@ -29,24 +29,31 @@ archivo_mayo_sep="tmp_mayo_sep.txt"
 > "$archivo_otros"
 > "$archivo_mayo_sep"
 
+
+# Default Chilescase to "n" 0 if not "y"1 or "n" 0
+if [[ "$Chilescase" != 1 && "$Chilescase" != 0 ]]; then
+        Chilescase=0
+fi
+
+if [[ "$Chilescase" == 1 ]]; then
 # Leer línea por línea
-while IFS= read -r linea; do
+  while IFS= read -r linea; do
     # Extraer el mes de la primera fecha (YYYYMMDD)
-    mes=${linea:4:2}
+      mes=${linea:4:2}
 
     # Si el mes está entre 05 y 09, guardar en archivo_mayo_sep
-    if [[ "$mes" =~ ^0[5-9]$ ]]; then
-        echo "$linea" >> "$archivo_mayo_sep"
-    else
-        echo "$linea" >> "$archivo_otros"
-    fi
-done < "$archivo"
+      if [[ "$mes" =~ ^0[5-9]$ ]]; then
+          echo "$linea" >> "$archivo_mayo_sep"
+      else
+          echo "$linea" >> "$archivo_otros"
+      fi
+  done < "$archivo"
 
 # Concatenar las líneas: primero las que NO son de mayo a septiembre, luego las otras
-cat "$archivo_otros" "$archivo_mayo_sep" > "$archivo"
+  cat "$archivo_otros" "$archivo_mayo_sep" > "$archivo"
 
 # Limpiar archivos temporales
-rm "$archivo_otros" "$archivo_mayo_sep"
+  rm "$archivo_otros" "$archivo_mayo_sep"
 
 # Check if the output file was created
 if [[ -f $output ]]; then

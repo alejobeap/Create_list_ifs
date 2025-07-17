@@ -11,6 +11,7 @@ echo "Create wrap and cc for shorters connections (2 for each epoch)"
   sleep 9200
   echo "Estimated the average coherence"
   python Estimate_Coherence_Average_from_DEM.py
+  python plot_histogram_average_coherence.py
   ./filtered_average.sh
   python matriz_coherencia.py
   ./MesesLargos.sh

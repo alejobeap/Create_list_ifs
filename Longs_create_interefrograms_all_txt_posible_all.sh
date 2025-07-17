@@ -4,7 +4,7 @@
 INPUT_FILE="dates_longs_filter.txt"
 OUTPUT_FILE="Longs_combination_all.txt"
 OUTPUT_FILE_1="Longs_combination_longs.txt"
-Chilescase="y"
+Chilescase=1
 
 # Ensure the input file exists
 if [ ! -f "$INPUT_FILE" ]; then
@@ -42,19 +42,24 @@ month_diff() {
 
 # Function to check if a date falls in the excluded months (June to September)
 # Only applies the check if Chilescase == "y"
-# Returns 0 if excluded, 1 if not excluded
+# Defaults Chilescase to "n" if undefined or invalid
 is_excluded_month() {
     local date="$1"
-    local month=$((10#${date:4:2}))  # Extract month, force base 10 to avoid leading zeros issues
+    local month=$((10#${date:4:2}))  # Extract the month from date
 
-    if [[ "$Chilescase" == "y" ]]; then
+    # Default Chilescase to "n" 0 if not "y"1 or "n" 0
+    if [[ "$Chilescase" != 1 && "$Chilescase" != 0 ]]; then
+        Chilescase=0
+    fi
+
+    if [[ "$Chilescase" == 1 ]]; then
         if (( month >= 6 && month <= 9 )); then
             return 0  # Excluded
         else
             return 1  # Not excluded
         fi
     else
-        return 1  # Not excluded if Chilescase != "y"
+        return 1  # Not excluded
     fi
 }
 

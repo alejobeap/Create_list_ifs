@@ -2,8 +2,6 @@
 
 # File containing the list of dates (one date per line in YYYYMMDD format)
 INPUT_FILE="listarslc.txt"
-OUTPUT_FILE="combination_all.txt"
-OUTPUT_FILE_1="combination_longs.txt"
 OUTPUT_FILE_2="combination_shorts.txt"
 
 # Step 3: Remove listarslc.txt if it exists
@@ -58,3 +56,6 @@ for ((i=0; i<${#lines[@]}; i++)); do
 done
 
 echo "Short combinations written to $OUTPUT_FILE_2"
+line_count=$(wc -l < "$OUTPUT_FILE_2")
+echo "📄 Número total de combinaciones generadas: $line_count"
+

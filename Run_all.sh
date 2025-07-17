@@ -19,6 +19,12 @@ python matriz_coherencia.py
 ./Longs_create_interefrograms_all_txt.sh
 ./crear_standar_list.sh
 ./crear_final_list.sh
+
+sleep 10800  # Esperar 2 horas
+./Buscar_folders_sin_unw_png.sh
+./deletefolder_GEOC.sh
+./unwrap_run.sh
+
 EOF
 
 # Hacerlo ejecutable

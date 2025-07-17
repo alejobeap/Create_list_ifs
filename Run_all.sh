@@ -1,14 +1,15 @@
 #!/bin/bash
 
 gapfill=0
-# Default Chilescase to "n" if not "y"1 or 0
-    if [[ "$gapfill" != 1 && "$gapfill" != 0 ]]; then
-        gapfill=0
-    fi
 
-    if [[ "$gapfill" == 1 ]]; then
-       ./
+if [[ "$gapfill" != 1 && "$gapfill" != 0 ]]; then
+        gapfill=0
+fi
+
+if [[ "$gapfill" == 1 ]]; then
+       ./Gap_fill_licsar_make_frame.sh
        ./nla_request_lics.sh
+fi
     
 echo "Run shorters connections (2 for each epoch)"
 ./create_interefrograms_all_txt.sh

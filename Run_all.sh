@@ -36,14 +36,11 @@ python matriz_coherencia.py
 
 sleep 10800  # Esperar 2 horas
 ./deletefolder_GEOC.sh
-
-
 ./GAPS_GEOC.sh
 
 
+sleep 10800  # Esperar 2 horas
 ./Buscar_folders_sin_unw_png.sh
-
-
 ./unwrap_run.sh
 
 EOF

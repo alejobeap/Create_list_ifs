@@ -33,9 +33,17 @@ python matriz_coherencia.py
 ./crear_standar_list.sh
 ./crear_final_list.sh
 
+
 sleep 10800  # Esperar 2 horas
-./Buscar_folders_sin_unw_png.sh
 ./deletefolder_GEOC.sh
+
+
+./GAPS_GEOC.sh
+
+
+./Buscar_folders_sin_unw_png.sh
+
+
 ./unwrap_run.sh
 
 EOF
@@ -48,3 +56,6 @@ nohup ./run_later.sh > run_later.log 2>&1 &
 
 echo "✅ La segunda parte del script se ejecutará automáticamente en 2 horas."
 echo "✔️ Puedes cerrar esta terminal si quieres. Todo quedará registrado en run_later.log"
+
+
+

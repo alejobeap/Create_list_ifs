@@ -12,6 +12,17 @@ if [ ! -f "$INPUT_FILE" ]; then
     exit 1
 fi
 
+line_count=$(wc -l < "$INPUT_FILE")
+if [ "$line_count" -lt 100 ]; then
+    INPUT_FILE="dates_longs.txt"
+fi
+
+# Ensure the input file exists
+if [ ! -f "$INPUT_FILE" ]; then
+    echo "Input file $INPUT_FILE not found!"
+    exit 1
+fi
+
 # Clear the output files
 echo "Initializing output files..."
 > "$OUTPUT_FILE"

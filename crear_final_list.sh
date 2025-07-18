@@ -63,7 +63,7 @@ else
     echo "Failed to create the output file."
 fi
 
-if chileborrar=="y"; then
+if [[  "$Chilescase" == 1 ]]; then
     echo "Delete remaining months for Chile area for avoid unwrapping time"
     rm -rf GEOC/20*06*_* GEOC/20*08*_* GEOC/20*08*_* GEOC/20*09*_* GEOC/20*10*_*
 fi

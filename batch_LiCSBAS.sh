@@ -6,6 +6,7 @@
 #                                         03: LiCSBAS03op_GACOS.py (optional)
 #                                         04: LiCSBAS04op_mask_unw.py (optional)
 #                                         05: LiCSBAS05op_clip_unw.py (optional)
+#  06: LiCSBAS03op_ERA5.py (optional)
 #  11: LiCSBAS11_check_unw.py
 #  (optional) 120: LiCSBAS120_choose_reference.py   - RECOMMENDED, especially if nullification is used, thus added to cometdev
 #  12: LiCSBAS12_loop_closure.py
@@ -20,15 +21,15 @@
 #################
 ### Settings ####
 #################
-start_step="02"	# 01-05, 11-16
+start_step="01"	# 01-05, 11-16
 end_step="16"	# 01-05, 11-16
 
-cometdev='0'
+cometdev='0' # shortcut to use COMET's experimental/dev functions. At this moment, '1' will turn on the nullification. Recommended: 0
 # sbovl='n' # if 'y', LiCSBAS will apply on sbovls  ## TODO
 eqoffs="n"  # if 'y', it will do: get_eq_offsets, then invert. if singular_gauss, then set use of model (not recommended now, experimental/need some work).
 nlook="1"	# multilook factor, used in step02
 GEOCmldir="GEOCml${nlook}"	# If start from 11 or later after doing 03-05, use e.g., GEOCml${nlook}GACOSmaskclip
-n_para="15" # Number of parallel processing in step 02-05,12,13,16. default: number of usable CPU
+n_para="" # Number of parallel processing in step 02-05,12,13,16. default: number of usable CPU
 gpu="n"	# y/n
 check_only="n" # y/n. If y, not run scripts and just show commands to be done
 
@@ -41,7 +42,7 @@ freq="" # default: 5.405e9 Hz
 run_reunwrapping='n' # y/n. default: 'n'. Reunwrapping would use 02to05 script instead of the original 02[,03,04,05]
 
 ### Optional steps (03-05) ###
-order_op03_05="05 04 03"	# can change order e.g., 05 03 04
+order_op03_05="03 04 05"	# can change order e.g., 05 03 04
 do03op_GACOS="n"	# y/n
 do04op_mask="n"	# y/n
 do05op_clip="n"	# y/n
@@ -51,6 +52,7 @@ p04_mask_range=""	# e.g. 10:100/20:200 (ix start from 0)
 p04_mask_range_file=""	# Name of file containing range list
 p05_clip_range=""	# e.g. 10:100/20:200 (ix start from 0)
 p05_clip_range_geo=""	# e.g. 130.11/131.12/34.34/34.6 (in deg)
+do06op_ERA5="n" #"y"	# ERA5 apply if icams files in LiCSAR
 
 # Optional reunwrapping:
 p02to05_freq=$freq # default: 5.405e9 Hz
@@ -75,29 +77,29 @@ p11_unw_thre=""	# default: 0.3
 p11_coh_thre=""	# default: 0.05
 p11_s_param="n" # y/n
 p11_sbovl="n"
+p11_updatemonitoring="" #y/n default n
 p120_use="n"  # y/n
 p120_sbovl="n"
-p12_loop_thre="8"	# default: 1.5 rad. With --nullify, recommended higher value (as this is an average over the whole scene)
+p12_loop_thre=""	# default: 1.5 rad. With --nullify, recommended higher value (as this is an average over the whole scene)
 p12_multi_prime="y"	# y/n. y recommended
-p12_nullify="y" # y/n. y recommended
+p12_nullify="" # y/n. y recommended
 p12_rm_ifg_list=""	# List file containing ifgs to be manually removed
 p12_skippngs="" # y/n. n by default
-p12_nullify_threshold="" #by default np.pi
 p13_nullify_noloops="" # y/n. n by default
 p13_singular="" # y/n. n by default
-p13_singular_gauss="y" # y/n. n by default
+p13_singular_gauss="" # y/n. n by default
 p13_skippngs="" # y/n. n by default
 p13_sbovl="n"
 p15_coh_thre=""	# default: 0.05
 p15_n_unw_r_thre=""	# default: 1.5
 p15_vstd_thre=""	# default: 100 mm/yr
 p15_maxTlen_thre=""	# default: 1 yr
-p15_n_gap_thre="0"	# default: 10
+p15_n_gap_thre=""	# default: 10
 p15_stc_thre=""	# default: 10 mm
-p15_n_ifg_noloop_thre="200"	# default: 500 - setting this much higher than orig since we nullify them (p13_nullify_noloops)
+p15_n_ifg_noloop_thre=""	# default: 500 - setting this much higher than orig since we nullify them (p13_nullify_noloops)
 p15_n_loop_err_thre=""	# default: 5
-p15_n_loop_err_ratio_thre="0.5"	# default: 0.7 - in future we will switch to this ratio term, instead of n_loop_err
-p15_resid_rms_thre="10"	# default: 15 mm
+p15_n_loop_err_ratio_thre=""	# default: 0.7 - in future we will switch to this ratio term, instead of n_loop_err
+p15_resid_rms_thre=""	# default: 15 mm
 p15_avg_phasebias="" # default: not used. Setting 1 or 1.2 rad is good option
 p15_n_gap_use_merged="y" # default: 'y'
 p15_sbovl="n"
@@ -133,6 +135,11 @@ p04_outGEOCmldir_suffix="" # default: mask
 p04_n_para=$n_para   # default: # of usable CPU
 p05_inGEOCmldir=""      # default: $GEOCmldir
 p05_outGEOCmldir_suffix="" # default: clip
+p06_fillhole="y"	# y/n. default: n
+p06_era5dir="ERA5"	# default: ERA5
+p06_n_para=""   # default: # of usable CPU
+p06_inGEOCmldir=""      # default: $GEOCmldir
+p06_outGEOCmldir_suffix="ERA5" # default: ERA5
 p05_n_para=$n_para   # default: # of usable CPU
 p11_GEOCmldir=""	# default: $GEOCmldir
 p11_TSdir=""	# default: TS_$GEOCmldir
@@ -145,13 +152,13 @@ p12_n_para=$n_para	# default: # of usable CPU
 p13_GEOCmldir=""        # default: $GEOCmldir
 p13_TSdir=""    # default: TS_$GEOCmldir
 p13_inv_alg=""	# LS (default) or WLS
-p13_mem_size="8192"	# default: 8000 (MB)
+p13_mem_size=""	# default: 8000 (MB)
 p13_gamma=""	# default: 0.0001
 p13_n_para=$n_para	# default: # of usable CPU
 p13_n_unw_r_thre=""	# default: 1 for shorter-than-L-band-wavelength (if cometdev, will set to 0.1)
 p13_keep_incfile="n"	# y/n. default: n
 p14_TSdir=""    # default: TS_$GEOCmldir
-p14_mem_size="8192" # default: 4000 (MB)
+p14_mem_size="" # default: 4000 (MB)
 p15_TSdir=""    # default: TS_$GEOCmldir
 p15_vmin=""	# default: auto (mm/yr)
 p15_vmax=""	# default: auto (mm/yr)
@@ -354,10 +361,38 @@ if [ $step -eq 05 -a $start_step -le 05 -a $end_step -ge 05 ];then
   fi
 fi
 
+
+if [ $step -eq 06 -a $start_step -le 06 -a $end_step -ge 06 ];then
+  if [ $do06op_ERA5 == "y" ]; then
+    p06_op=""
+    if [ ! -z $p06_inGEOCmldir ];then inGEOCmldir="$p06_inGEOCmldir";
+      else inGEOCmldir="$GEOCmldir"; fi
+    p06_op="$p06_op -i $inGEOCmldir"
+    if [ ! -z $p06_outGEOCmldir_suffix ];then outGEOCmldir="$inGEOCmldir$p06_outGEOCmldir_suffix";
+      else outGEOCmldir="${inGEOCmldir}ERA5"; fi
+    p06_op="$p06_op -o $outGEOCmldir"
+    if [ ! -z $p06_era5dir ];then p06_op="$p06_op -g $p06_era5dir"; fi
+    if [ $p06_fillhole == "y" ];then p06_op="$p06_op --fillhole"; fi
+    if [ ! -z $p06_n_para ];then p06_op="$p06_op --n_para $p06_n_para";
+    elif [ ! -z $n_para ];then p06_op="$p06_op --n_para $n_para";fi
+
+    if [ $check_only == "y" ];then
+      echo "LiCSBAS03op_ERA5.py $p06_op"
+    else
+      LiCSBAS03op_ERA5.py $p06_op 2>&1 | tee -a $log
+      if [ ${PIPESTATUS[0]} -ne 0 ];then exit 1; fi
+    fi
+    ### Update GEOCmldir to be used for following steps
+    GEOCmldir="$outGEOCmldir"
+  fi
+fi
+
 done ##1
+
 
 ### Determine name of TSdir
 TSdir="TS_$GEOCmldir"
+
 
 
 if [ $start_step -le 11 -a $end_step -ge 11 ];then
@@ -370,6 +405,7 @@ if [ $start_step -le 11 -a $end_step -ge 11 ];then
   if [ ! -z $p11_minbtemp ];then p11_op="$p11_op --minbtemp $p11_minbtemp"; fi
   if [ ! -z $p11_maxbtemp ];then p11_op="$p11_op --minbtemp $p11_maxbtemp"; fi
   if [ $p11_sbovl == "y" ];then p11_op="$p11_op --sbovl"; fi
+  if [ $p11_updatemonitoring == "y" ];then p11_op="$p11_op --monitoring"; fi
   if [ $p11_s_param == "y" ];then p11_op="$p11_op -s"; fi
   if [ $check_only == "y" ];then
     echo "LiCSBAS11_check_unw.py $p11_op"
@@ -409,9 +445,9 @@ if [ $start_step -le 12 -a $end_step -ge 12 ];then
         else p12_op="$p12_op -d $GEOCmldir"; fi
       if [ ! -z $p12_TSdir ];then p12_op="$p12_op -t $p12_TSdir"; fi
       if [ ! -z $p12_loop_thre ];then p12_op="$p12_op -l $p12_loop_thre"; fi
-      if [ ! -z $p12_nullify_threshold ];then p12_nullify_threshold_eval=$(python3 -c "import numpy as np; print($p12_nullify_threshold)");  p12_op="$p12_op --nullify_threshold $p12_nullify_threshold_eval"; fi
       if [ $p12_multi_prime == "y" ];then p12_op="$p12_op --multi_prime"; fi
       if [ $p12_nullify == "y" ];then p12_op="$p12_op --nullify"; fi
+      if [ $p11_updatemonitoring == "y" ];then p12_op="$p12_op --monitoring"; fi
       if [ $p12_skippngs == "y" ];then p12_op="$p12_op --nopngs"; fi
       if [ ! -z $p12_rm_ifg_list ];then p12_op="$p12_op --rm_ifg_list $p12_rm_ifg_list"; fi
       if [ ! -z $p12_n_para ];then p12_op="$p12_op --n_para $p12_n_para";
@@ -468,6 +504,7 @@ if [ $start_step -le 13 -a $end_step -ge 13 ];then
     elif [ ! -z "$n_para" ];then p13_op="$p13_op --n_para $n_para"; fi
   if [ ! -z "$p13_n_unw_r_thre" ];then p13_op="$p13_op --n_unw_r_thre $p13_n_unw_r_thre"; fi
   if [ "$p13_keep_incfile" == "y" ];then p13_op="$p13_op --keep_incfile"; fi
+  if [ $p11_updatemonitoring == "y" ];then p13_op="$p13_op --monitoring"; fi
   if [ "$p13_nullify_noloops" == "y" ];then p13_op="$p13_op --nullify_noloops"; fi
   if [ "$p13_singular" == "y" ];then p13_op="$p13_op --singular"; fi
   if [ "$p13_sbovl" == "y" ];then p13_op="$p13_op --sbovl"; fi
@@ -513,6 +550,7 @@ if [ $start_step -le 14 -a $end_step -ge 14 ];then
     else p14_op="$p14_op -t $TSdir"; fi
   if [ ! -z $p14_mem_size ];then p14_op="$p14_op --mem_size $p14_mem_size"; fi
   if [ $gpu == "y" ];then p14_op="$p14_op --gpu"; fi
+  if [ $p11_updatemonitoring == "y" ];then p14_op="$p14_op --monitoring"; fi
   if [ "$eqoffs" == "y" ]; then
     # we then do not want to regenerate vstd
     extra='--skipexisting'
@@ -545,6 +583,7 @@ if [ $start_step -le 15 -a $end_step -ge 15 ];then
   if [ ! -z "$p15_vmin" ];then p15_op="$p15_op --vmin $p15_vmin"; fi
   if [ ! -z "$p15_vmax" ];then p15_op="$p15_op --vmax $p15_vmax"; fi
   if [ "$p15_keep_isolated" == "y" ];then p15_op="$p15_op --keep_isolated"; fi
+  if [ $p11_updatemonitoring == "y" ];then p15_op="$p15_op --monitoring"; fi
   if [ "$p15_noautoadjust" == "y" ];then p15_op="$p15_op --noautoadjust"; fi
   if [ "$p15_sbovl" == "y" ];then p15_op="$p15_op --sbovl"; fi
   if [ "$p15_n_gap_use_merged" == "y" ];then p15_op="$p15_op --n_gap_use_merged"; fi
@@ -565,6 +604,7 @@ if [ $start_step -le 16 -a $end_step -ge 16 ];then
   if [ ! -z "$p16_filtwidth_yr" ];then p16_op="$p16_op -y $p16_filtwidth_yr"; fi
   if [ ! -z "$p16_deg_deramp" ];then p16_op="$p16_op -r $p16_deg_deramp"; fi
   if [ "$p16_demerr" == "y" ];then p16_op="$p16_op --demerr"; fi
+  if [ $p11_updatemonitoring == "y" ];then p16_op="$p16_op --monitoring"; fi
   if [ "$p16_hgt_linear" == "y" ];then p16_op="$p16_op --hgt_linear"; fi
   if [ ! -z "$p16_hgt_min" ];then p16_op="$p16_op --hgt_min $p16_hgt_min"; fi
   if [ ! -z "$p16_hgt_max" ];then p16_op="$p16_op --hgt_max $p16_hgt_max"; fi

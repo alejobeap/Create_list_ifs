@@ -4,7 +4,7 @@
 INPUT_FILE="dates_longs_filter.txt"
 OUTPUT_FILE="Longs_combination_all.txt"
 OUTPUT_FILE_1="Longs_combination_longs.txt"
-Chilescase=1
+Chilescase=0
 
 # Ensure the input file exists
 if [ ! -f "$INPUT_FILE" ]; then

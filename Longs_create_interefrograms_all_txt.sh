@@ -3,7 +3,7 @@
 # File containing the list of dates (format: YYYYMMDD)
 INPUT_FILE="dates_longs_filter.txt"
 OUTPUT_FILE="Longs_combination_longs.txt"
-Chilescase = "y"
+Chilescase = "n"
 
 
 if [ ! -f "$INPUT_FILE" ]; then

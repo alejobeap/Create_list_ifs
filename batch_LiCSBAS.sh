@@ -14,7 +14,8 @@
 #  14: LiCSBAS14_vel_std.py
 #  15: LiCSBAS15_mask_ts.py
 #  16: LiCSBAS16_filt_ts.py
-
+#  Optional
+#  17: LiCSBAS17_combine_monitoring.py - To monitoring approach for volcanoes
 #
 # Status of COMET dev version - the experimental functions are turned on with 
 #
@@ -22,14 +23,14 @@
 ### Settings ####
 #################
 start_step="01"	# 01-05, 11-16
-end_step="16"	# 01-05, 11-16
+end_step="16"	# 01-05, 11-16  # 17 monitoring option
 
 cometdev='0' # shortcut to use COMET's experimental/dev functions. At this moment, '1' will turn on the nullification. Recommended: 0
 # sbovl='n' # if 'y', LiCSBAS will apply on sbovls  ## TODO
 eqoffs="n"  # if 'y', it will do: get_eq_offsets, then invert. if singular_gauss, then set use of model (not recommended now, experimental/need some work).
 nlook="1"	# multilook factor, used in step02
 GEOCmldir="GEOCml${nlook}"	# If start from 11 or later after doing 03-05, use e.g., GEOCml${nlook}GACOSmaskclip
-n_para="15" # Number of parallel processing in step 02-05,12,13,16. default: number of usable CPU
+n_para="" # Number of parallel processing in step 02-05,12,13,16. default: number of usable CPU
 gpu="n"	# y/n
 check_only="n" # y/n. If y, not run scripts and just show commands to be done
 
@@ -80,14 +81,14 @@ p11_sbovl="n"
 p11_updatemonitoring="" #y/n default n
 p120_use="n"  # y/n
 p120_sbovl="n"
-p12_loop_thre="8"	# default: 1.5 rad. With --nullify, recommended higher value (as this is an average over the whole scene)
+p12_loop_thre=""	# default: 1.5 rad. With --nullify, recommended higher value (as this is an average over the whole scene)
 p12_multi_prime="y"	# y/n. y recommended
 p12_nullify="" # y/n. y recommended
 p12_rm_ifg_list=""	# List file containing ifgs to be manually removed
-p12_skippngs="y" # y/n. n by default
+p12_skippngs="" # y/n. n by default
 p13_nullify_noloops="" # y/n. n by default
 p13_singular="" # y/n. n by default
-p13_singular_gauss="y" # y/n. n by default
+p13_singular_gauss="" # y/n. n by default
 p13_skippngs="" # y/n. n by default
 p13_sbovl="n"
 p15_coh_thre=""	# default: 0.05
@@ -167,7 +168,7 @@ p15_noautoadjust="n" # y/n. default: n
 p16_TSdir=""    # default: TS_$GEOCmldir
 p16_nomask="n"	# y/n. default: n
 p16_n_para=$n_para   # default: # of usable CPU
-
+p17_TSdir=""    # default: TS_$GEOCmldir but use the TS_$GEOCmldir_update to combine
 
 # eqoffs
 eqoffs_minmag="0"  # min magnitude of earthquakes to auto-find. 0 means skipping the estimation.
@@ -405,7 +406,7 @@ if [ $start_step -le 11 -a $end_step -ge 11 ];then
   if [ ! -z $p11_minbtemp ];then p11_op="$p11_op --minbtemp $p11_minbtemp"; fi
   if [ ! -z $p11_maxbtemp ];then p11_op="$p11_op --minbtemp $p11_maxbtemp"; fi
   if [ $p11_sbovl == "y" ];then p11_op="$p11_op --sbovl"; fi
-  if [ "$p11_updatemonitoring" == "y" ];then p11_op="$p11_op --monitoring"; fi
+  if [ $p11_updatemonitoring == "y" ];then p11_op="$p11_op --monitoring"; fi
   if [ $p11_s_param == "y" ];then p11_op="$p11_op -s"; fi
   if [ $check_only == "y" ];then
     echo "LiCSBAS11_check_unw.py $p11_op"
@@ -447,7 +448,7 @@ if [ $start_step -le 12 -a $end_step -ge 12 ];then
       if [ ! -z $p12_loop_thre ];then p12_op="$p12_op -l $p12_loop_thre"; fi
       if [ $p12_multi_prime == "y" ];then p12_op="$p12_op --multi_prime"; fi
       if [ $p12_nullify == "y" ];then p12_op="$p12_op --nullify"; fi
-      if [ "$p11_updatemonitoring" == "y" ];then p12_op="$p12_op --monitoring"; fi
+      if [ $p11_updatemonitoring == "y" ];then p12_op="$p12_op --monitoring"; fi
       if [ $p12_skippngs == "y" ];then p12_op="$p12_op --nopngs"; fi
       if [ ! -z $p12_rm_ifg_list ];then p12_op="$p12_op --rm_ifg_list $p12_rm_ifg_list"; fi
       if [ ! -z $p12_n_para ];then p12_op="$p12_op --n_para $p12_n_para";
@@ -504,7 +505,7 @@ if [ $start_step -le 13 -a $end_step -ge 13 ];then
     elif [ ! -z "$n_para" ];then p13_op="$p13_op --n_para $n_para"; fi
   if [ ! -z "$p13_n_unw_r_thre" ];then p13_op="$p13_op --n_unw_r_thre $p13_n_unw_r_thre"; fi
   if [ "$p13_keep_incfile" == "y" ];then p13_op="$p13_op --keep_incfile"; fi
-  if [ "$p11_updatemonitoring" == "y" ];then p13_op="$p13_op --monitoring"; fi
+  if [ $p11_updatemonitoring == "y" ];then p13_op="$p13_op --monitoring"; fi
   if [ "$p13_nullify_noloops" == "y" ];then p13_op="$p13_op --nullify_noloops"; fi
   if [ "$p13_singular" == "y" ];then p13_op="$p13_op --singular"; fi
   if [ "$p13_sbovl" == "y" ];then p13_op="$p13_op --sbovl"; fi
@@ -550,7 +551,7 @@ if [ $start_step -le 14 -a $end_step -ge 14 ];then
     else p14_op="$p14_op -t $TSdir"; fi
   if [ ! -z $p14_mem_size ];then p14_op="$p14_op --mem_size $p14_mem_size"; fi
   if [ $gpu == "y" ];then p14_op="$p14_op --gpu"; fi
-  if [ "$p11_updatemonitoring" == "y" ];then p14_op="$p14_op --monitoring"; fi
+  if [ $p11_updatemonitoring == "y" ];then p14_op="$p14_op --monitoring"; fi
   if [ "$eqoffs" == "y" ]; then
     # we then do not want to regenerate vstd
     extra='--skipexisting'
@@ -583,7 +584,7 @@ if [ $start_step -le 15 -a $end_step -ge 15 ];then
   if [ ! -z "$p15_vmin" ];then p15_op="$p15_op --vmin $p15_vmin"; fi
   if [ ! -z "$p15_vmax" ];then p15_op="$p15_op --vmax $p15_vmax"; fi
   if [ "$p15_keep_isolated" == "y" ];then p15_op="$p15_op --keep_isolated"; fi
-  if [ "$p11_updatemonitoring" == "y" ];then p15_op="$p15_op --monitoring"; fi
+  if [ $p11_updatemonitoring == "y" ];then p15_op="$p15_op --monitoring"; fi
   if [ "$p15_noautoadjust" == "y" ];then p15_op="$p15_op --noautoadjust"; fi
   if [ "$p15_sbovl" == "y" ];then p15_op="$p15_op --sbovl"; fi
   if [ "$p15_n_gap_use_merged" == "y" ];then p15_op="$p15_op --n_gap_use_merged"; fi
@@ -604,7 +605,7 @@ if [ $start_step -le 16 -a $end_step -ge 16 ];then
   if [ ! -z "$p16_filtwidth_yr" ];then p16_op="$p16_op -y $p16_filtwidth_yr"; fi
   if [ ! -z "$p16_deg_deramp" ];then p16_op="$p16_op -r $p16_deg_deramp"; fi
   if [ "$p16_demerr" == "y" ];then p16_op="$p16_op --demerr"; fi
-  if [ "$p11_updatemonitoring" == "y" ];then p16_op="$p16_op --monitoring"; fi
+  if [ $p11_updatemonitoring == "y" ];then p16_op="$p16_op --monitoring"; fi
   if [ "$p16_hgt_linear" == "y" ];then p16_op="$p16_op --hgt_linear"; fi
   if [ ! -z "$p16_hgt_min" ];then p16_op="$p16_op --hgt_min $p16_hgt_min"; fi
   if [ ! -z "$p16_hgt_max" ];then p16_op="$p16_op --hgt_max $p16_hgt_max"; fi
@@ -632,6 +633,19 @@ if [ $start_step -le 16 -a $end_step -ge 16 ];then
     if [ ${PIPESTATUS[0]} -ne 0 ];then exit 1; fi
   fi
 fi
+
+if [ $start_step -le 17 -a $end_step -ge 17 ];then
+  p17_op=""
+    if [ ! -z "$p17_TSdir" ];then p17_op="$p17_op -t $p17_TSdir";
+    else p17_op="$p17_op -t $TSdir"; fi
+      if [ "$check_only" == "y" ];then
+    echo "LiCSBAS17_combine_monitoring.py $p17_op"
+  else
+    LiCSBAS17_combine_monitoring.py $p17_op 2>&1 | tee -a $log
+    if [ ${PIPESTATUS[0]} -ne 0 ];then exit 1; fi
+  fi
+fi
+    
 
 if [ $check_only == "y" ];then
   echo ""

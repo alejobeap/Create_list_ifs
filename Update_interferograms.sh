@@ -1,8 +1,11 @@
 #!/bin/bash
 
+parent_dir=$(basename "$(dirname "$(pwd)")")
+current_dir=$(basename "$(pwd)")
+
 OLD_FILE="Updated_list_old.txt"
 NEW_FILE="Updated_list_new.txt"
-OUTPUT_FILE="Update_combinations_IFS.txt"
+OUTPUT_FILE="IFSforLiCSBAS_${current_dir}_${parent_dir}_update.txt"
 Chilescase="n"  # Cambiar a "y" para excluir meses 6 a 9
 
 [[ ! -f $OLD_FILE ]] && { echo "❌ $OLD_FILE no encontrado"; exit 1; }
@@ -91,5 +94,14 @@ for ((i = start_index; i < len; i++)); do
   done
 done
 
+
 echo "Total combinaciones generadas: $(wc -l < "$OUTPUT_FILE")"
 echo "✅ Script terminado."
+
+
+
+
+echo "framebatch_gapfill.sh -l -I /work/scratch-pw3/licsar/alejobea/batchdir/${parent_dir}/${current_dir}/IFSforLiCSBAS_${current_dir}_${parent_dir}_update.txt 5 200 7 2"
+
+framebatch_gapfill.sh -l -I /work/scratch-pw3/licsar/alejobea/batchdir/${parent_dir}/${current_dir}/IFSforLiCSBAS_${current_dir}_${parent_dir}_update.txt 5 200 7 2
+

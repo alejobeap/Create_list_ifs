@@ -1,199 +1,144 @@
 #!/bin/bash
 
-# File containing the list of dates (format: YYYYMMDD)
 INPUT_FILE="Updated_list.txt"
 OUTPUT_FILE="Update_combinations_IFS.txt"
-Chilescase="n"  # Set to "y" to exclude June–September dates
+Chilescase="n"
 
-if [ ! -f "$INPUT_FILE" ]; then
-    echo "❌ Input file $INPUT_FILE not found!"
-    exit 1
-fi
-
-echo "🧹 Initializing output file..."
+[[ ! -f $INPUT_FILE ]] && { echo "❌ $INPUT_FILE no encontrado"; exit 1; }
 > "$OUTPUT_FILE"
 
 # Leer fechas ordenadas
-dates=($(sort "$INPUT_FILE"))
+mapfile -t dates < <(sort "$INPUT_FILE")
 
-# Diferencia absoluta en días
-day_diff() {
-    local d1="$1"
-    local d2="$2"
-    local e1=$(date -d "${d1:0:4}-${d1:4:2}-${d1:6:2}" +%s)
-    local e2=$(date -d "${d2:0:4}-${d2:4:2}-${d2:6:2}" +%s)
-    local diff_sec=$((e2 - e1))
-    echo $((diff_sec >= 0 ? diff_sec / 86400 : -diff_sec / 86400))
+month_diff() {
+  local s=$1 e=$2
+  local sy=${s:0:4} sm=${s:4:2} ey=${e:0:4} em=${e:4:2}
+  echo $(((10#$ey - 10#$sy)*12 + (10#$em - 10#$sm)))
 }
 
-# Verificar si diferencia es aprox. 3, 6, 9 o 12 meses
-is_approx_valid_month_diff() {
-    local d1="$1"
-    local d2="$2"
-    local diff_days=$(day_diff "$d1" "$d2")
-    local valid_ranges=(90 180 270 360)
-    local tolerance=15
-
-    for target in "${valid_ranges[@]}"; do
-        if (( diff_days >= target - tolerance && diff_days <= target + tolerance )); then
-            return 0
-        fi
-    done
-    return 1
+is_excluded() {
+  local m=$((10#${1:4:2}))
+  [[ $Chilescase == "y" && $m -ge 6 && $m -le 9 ]]
 }
 
-# Verificar si fecha cae en meses excluidos
-is_excluded_month() {
-    local date="$1"
-    local month=$((10#${date:4:2}))
+valid_diff() {
+  local d=$1
+  [[ $d == 6 || $d == 9 || $d == 12 || $d == 15 ]]
+}
 
-    if [[ "$Chilescase" != "y" && "$Chilescase" != "n" ]]; then
-        Chilescase="n"
+# Generar combinaciones para cada fecha
+generate_combos() {
+  local i=$1 sd=${dates[i]} count_intervals=([6]=0 [9]=0 [12]=0 [15]=0) next3=0
+
+  for ((j=i+1; j<${#dates[@]}; j++)); do
+    local ed=${dates[j]}
+    local diff=$(month_diff "$sd" "$ed")
+
+    # combos 6,9,12,15 meses
+    if ! is_excluded "$sd" && ! is_excluded "$ed" && valid_diff "$diff" && (( count_intervals[$diff]<2 )); then
+      echo "${sd}_${ed}" >> "$OUTPUT_FILE"
+      ((count_intervals[$diff]++))
+      continue
     fi
 
-    if [[ "$Chilescase" == "y" ]]; then
-        (( month >= 6 && month <= 9 )) && return 0 || return 1
+    # combos con siguientes 3 fechas, sin importar diff
+    if (( next3 < 3 )); then
+      # evitar duplicados
+      if ! grep -q -E "^${sd}_${ed}$|^${ed}_${sd}$" "$OUTPUT_FILE"; then
+        echo "${sd}_${ed}" >> "$OUTPUT_FILE"
+        ((next3++))
+      fi
     else
-        return 1
+      break
     fi
+  done
 }
 
-# Generar combinaciones válidas para una fecha
-generate_connections_for_date() {
-    local start_date="$1"
-    local index="$2"
+# Forzar conexiones entre años consecutivos (mínimo 2 combos)
+force_between_years() {
+  local y1=$1 y2=$2 count=0
+  local y1_dates=() y2_dates=()
 
-    for ((j = index + 1; j < ${#dates[@]}; j++)); do
-        local end_date="${dates[j]}"
-        if ! is_excluded_month "$start_date" && ! is_excluded_month "$end_date"; then
-            if is_approx_valid_month_diff "$start_date" "$end_date"; then
-                echo "${start_date}_${end_date}" >> "$OUTPUT_FILE"
-            fi
-        fi
+  for d in "${dates[@]}"; do
+    [[ ${d:0:4} == $y1 ]] && y1_dates+=("$d")
+    [[ ${d:0:4} == $y2 ]] && y2_dates+=("$d")
+  done
+
+  for d1 in "${y1_dates[@]}"; do
+    [[ $(is_excluded "$d1") ]] && continue
+    for d2 in "${y2_dates[@]}"; do
+      [[ $(is_excluded "$d2") ]] && continue
+      combo="${d1}_${d2}"
+      revcombo="${d2}_${d1}"
+      if ! grep -q -E "^$combo$|^$revcombo$" "$OUTPUT_FILE"; then
+        echo "$combo" >> "$OUTPUT_FILE"
+        ((count++))
+        ((count>=2)) && return
+      fi
     done
+  done
 }
 
-# Crear combinaciones por fecha
-for ((i = 0; i < ${#dates[@]}; i++)); do
-    generate_connections_for_date "${dates[i]}" "$i"
+# Verificar si existe combo entre años
+exists_combo_years() {
+  local y1=$1 y2=$2
+  grep -qE "^${y1}[0-9]{4}_.{8}$|^.{8}_${y1}[0-9]{4}$" "$OUTPUT_FILE" &&
+  grep -qE "${y2}" "$OUTPUT_FILE"
+}
+
+# Forzar mínimo 2 combos de cada fecha con fechas del siguiente año
+force_min_connections() {
+  local date=$1
+  local y=${date:0:4}
+  local ny=$((y+1))
+  local count=0
+
+  # Contar conexiones actuales con año siguiente
+  local connected=()
+  while IFS= read -r line; do
+    [[ $line == ${date}_* ]] && connected+=("${line#*_}")
+    [[ $line == *_${date} ]] && connected+=("${line%_*}")
+  done < "$OUTPUT_FILE"
+
+  for c in "${connected[@]}"; do
+    (( ${c:0:4} == ny )) && ((count++))
+  done
+
+  [[ $count -ge 2 ]] && return
+
+  # Agregar conexiones faltantes
+  for d in "${dates[@]}"; do
+    [[ ${d:0:4} == $ny ]] || continue
+    is_excluded "$d" && continue
+    if ! grep -q -E "^${date}_${d}$|^${d}_${date}$" "$OUTPUT_FILE"; then
+      echo "${date}_${d}" >> "$OUTPUT_FILE"
+      ((count++))
+      ((count>=2)) && break
+    fi
+  done
+}
+
+# Generar todas las combinaciones
+for i in "${!dates[@]}"; do
+  generate_combos "$i"
 done
 
-# Agregar combinaciones con las tres fechas siguientes (si cumplen)
-for ((i = 0; i < ${#dates[@]} - 3; i++)); do
-    d1="${dates[i]}"
-    for offset in 1 2 3; do
-        d2="${dates[i + offset]}"
-        if ! is_excluded_month "$d1" && ! is_excluded_month "$d2"; then
-            if is_approx_valid_month_diff "$d1" "$d2"; then
-                echo "${d1}_${d2}" >> "$OUTPUT_FILE"
-            fi
-        fi
-    done
-done
-
-# Quitar duplicados
-sort -u "$OUTPUT_FILE" -o "$OUTPUT_FILE"
-
-# Extraer años únicos
 years=($(cut -c1-4 "$INPUT_FILE" | sort -u))
 
-# Cargar combinaciones existentes
-mapfile -t existing_combinations < <(cat "$OUTPUT_FILE")
-
-exists_connection_between_years() {
-    local year1=$1
-    local year2=$2
-    for combo in "${existing_combinations[@]}"; do
-        local y1=${combo:0:4}
-        local y2=${combo:9:4}
-        if { [[ "$y1" == "$year1" && "$y2" == "$year2" ]] || [[ "$y1" == "$year2" && "$y2" == "$year1" ]]; }; then
-            return 0
-        fi
-    done
-    return 1
-}
-
-force_connections_between_years() {
-    local year1=$1
-    local year2=$2
-    local count=0
-    local dates_year1=()
-    local dates_year2=()
-
-    for d in "${dates[@]}"; do
-        [[ "${d:0:4}" == "$year1" ]] && dates_year1+=("$d")
-        [[ "${d:0:4}" == "$year2" ]] && dates_year2+=("$d")
-    done
-
-    for d1 in "${dates_year1[@]}"; do
-        is_excluded_month "$d1" && continue
-        for d2 in "${dates_year2[@]}"; do
-            is_excluded_month "$d2" && continue
-            if is_approx_valid_month_diff "$d1" "$d2"; then
-                combo="${d1}_${d2}"
-                combo_rev="${d2}_${d1}"
-                if ! grep -q -e "^$combo$" -e "^$combo_rev$" "$OUTPUT_FILE"; then
-                    echo "$combo" >> "$OUTPUT_FILE"
-                    ((count++))
-                    if [[ $count -ge 2 ]]; then return; fi
-                fi
-            fi
-        done
-    done
-}
-
-for ((i = 0; i < ${#years[@]} - 1; i++)); do
-    y1=${years[i]}
-    y2=${years[i + 1]}
-    if ! exists_connection_between_years "$y1" "$y2"; then
-        echo "⚠️ Forzando conexiones entre $y1 y $y2..."
-        force_connections_between_years "$y1" "$y2"
-    fi
+# Forzar conexiones entre años consecutivos si faltan
+for ((i=0; i<${#years[@]}-1; i++)); do
+  y1=${years[i]}
+  y2=${years[i+1]}
+  if ! grep -qE "${y1}.*${y2}" "$OUTPUT_FILE"; then
+    echo "⚠️ Forzando combos entre $y1 y $y2"
+    force_between_years "$y1" "$y2"
+  fi
 done
 
-# Refrescar combinaciones
-mapfile -t existing_combinations < <(sort -u "$OUTPUT_FILE")
-
-force_connections_per_date_to_next_year() {
-    local date="$1"
-    local year=${date:0:4}
-    local next_year=$((year + 1))
-    local connections_count=0
-    declare -A connected_set
-
-    for combo in "${existing_combinations[@]}"; do
-        if [[ "$combo" == ${date}_* ]]; then
-            connected_date=${combo#*_}
-        elif [[ "$combo" == *_${date} ]]; then
-            connected_date=${combo%_*}
-        else
-            continue
-        fi
-        [[ "${connected_date:0:4}" == "$next_year" ]] && ((connections_count++)) && connected_set["$connected_date"]=1
-    done
-
-    if (( connections_count < 2 )); then
-        for d in "${dates[@]}"; do
-            [[ "${d:0:4}" == "$next_year" ]] || continue
-            is_excluded_month "$d" && continue
-            [[ -z "${connected_set[$d]}" ]] || continue
-            if is_approx_valid_month_diff "$date" "$d"; then
-                echo "${date}_${d}" >> "$OUTPUT_FILE"
-                ((connections_count++))
-                connected_set["$d"]=1
-                ((connections_count >= 2)) && break
-            fi
-        done
-        if (( connections_count < 2 )); then
-            echo "⚠️ No se lograron 2 conexiones para $date con $next_year."
-        fi
-    fi
-}
-
-for date in "${dates[@]}"; do
-    force_connections_per_date_to_next_year "$date"
+# Forzar conexiones mínimas de cada fecha con fechas del siguiente año
+for d in "${dates[@]}"; do
+  force_min_connections "$d"
 done
 
-line_count=$(wc -l < "$OUTPUT_FILE")
-echo "📄 Total combinaciones generadas: $line_count"
-echo "✅ Script finalizado."
+echo "Total combos generados: $(wc -l < "$OUTPUT_FILE")"
+echo "✅ Script terminado."

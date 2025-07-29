@@ -5,13 +5,11 @@ NEW_FILE="Updated_list_new.txt"
 OUTPUT_FILE="Update_combinations_IFS.txt"
 Chilescase="n"  # Cambiar a "y" para excluir meses 6 a 9
 
-# Validar archivos
 [[ ! -f $OLD_FILE ]] && { echo "❌ $OLD_FILE no encontrado"; exit 1; }
 [[ ! -f $NEW_FILE ]] && { echo "❌ $NEW_FILE no encontrado"; exit 1; }
 
 > "$OUTPUT_FILE"
 
-# Leer fechas ordenadas
 mapfile -t old_dates < <(sort "$OLD_FILE")
 mapfile -t new_dates < <(sort "$NEW_FILE")
 
@@ -21,6 +19,14 @@ month_diff() {
   echo $(((10#$ey - 10#$sy)*12 + (10#$em - 10#$sm)))
 }
 
+day_diff() {
+  local d1=$1 d2=$2
+  local ts1=$(date -d "${d1:0:4}-${d1:4:2}-${d1:6:2}" +%s)
+  local ts2=$(date -d "${d2:0:4}-${d2:4:2}-${d2:6:2}" +%s)
+  local diff=$(( (ts2 - ts1) / 86400 ))
+  echo ${diff#-}  # valor absoluto
+}
+
 is_excluded() {
   local m=$((10#${1:4:2}))
   [[ $Chilescase == "y" && $m -ge 6 && $m -le 9 ]]
@@ -28,7 +34,7 @@ is_excluded() {
 
 valid_diff() {
   local d=$1
-  [[ $d == 6 || $d == 9 || $d == 12 || $d == 15 ]]
+  [[ $d == 3 || $d == 6 || $d == 9 || $d == 12 ]]
 }
 
 combo_exists() {
@@ -39,7 +45,7 @@ combo_exists() {
 
 # Generar combinaciones entre old y new
 for old_date in "${old_dates[@]}"; do
-  count_intervals=([6]=0 [9]=0 [12]=0 [15]=0)
+  count_intervals=([3]=0 [6]=0 [9]=0 [12]=0)
   next3=0
 
   for new_date in "${new_dates[@]}"; do
@@ -47,16 +53,21 @@ for old_date in "${old_dates[@]}"; do
       continue
     fi
 
-    diff=$(month_diff "$old_date" "$new_date")
+    diff_m=$(month_diff "$old_date" "$new_date")
+    diff_d=$(day_diff "$old_date" "$new_date")
 
-    if valid_diff "$diff" && (( count_intervals[$diff] < 2 )); then
-      if ! combo_exists "${old_date}_${new_date}" "${new_date}_${old_date}"; then
-        echo "${old_date}_${new_date}" >> "$OUTPUT_FILE"
-        ((count_intervals[$diff]++))
-        continue
+    # Para meses 3,6,9,12 considerar ±12 días
+    if valid_diff "$diff_m" && (( count_intervals[$diff_m] < 2 )); then
+      if (( diff_d <= 12 )); then
+        if ! combo_exists "${old_date}_${new_date}" "${new_date}_${old_date}"; then
+          echo "${old_date}_${new_date}" >> "$OUTPUT_FILE"
+          ((count_intervals[$diff_m]++))
+          continue
+        fi
       fi
     fi
 
+    # combos con siguientes 3 fechas sin importar diff
     if (( next3 < 3 )); then
       if ! combo_exists "${old_date}_${new_date}" "${new_date}_${old_date}"; then
         echo "${old_date}_${new_date}" >> "$OUTPUT_FILE"
@@ -64,6 +75,18 @@ for old_date in "${old_dates[@]}"; do
       fi
     else
       break
+    fi
+  done
+done
+
+# Forzar combinaciones de las últimas 3 fechas old con todas las new (sin filtros)
+len=${#old_dates[@]}
+start_index=$(( len > 3 ? len - 3 : 0 ))
+
+for ((i = start_index; i < len; i++)); do
+  for new_date in "${new_dates[@]}"; do
+    if ! combo_exists "${old_dates[i]}_${new_date}" "${new_date}_${old_dates[i]}"; then
+      echo "${old_dates[i]}_${new_date}" >> "$OUTPUT_FILE"
     fi
   done
 done

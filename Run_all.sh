@@ -26,6 +26,7 @@ sleep 7200  # Esperar 2 horas
 
 echo "Estimated the average coherence"
 python Estimate_Coherence_Average_from_DEM.py
+python plot_histogram_average_coherence.py
 ./filtered_average.sh
 python matriz_coherencia.py
 ./MesesLargos.sh
@@ -36,7 +37,7 @@ python matriz_coherencia.py
 
 sleep 10800  # Esperar 2 horas
 ./deletefolder_GEOC.sh
-./GAPS_GEOC.sh
+#./GAPS_GEOC.sh
 
 
 sleep 10800  # Esperar 2 horas

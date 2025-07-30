@@ -1,7 +1,7 @@
 #!/bin/bash
 source $LiCSARpath/lib/LiCSAR_bash_lib.sh
 #10 is approx coh 0.04
-cohthr=4
+cohthr=5
 
 # M. Lazecky, 2021
 

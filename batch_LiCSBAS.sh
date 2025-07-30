@@ -21,10 +21,10 @@
 #################
 ### Settings ####
 #################
-start_step="01"	# 01-05, 11-16
+start_step="02"	# 01-05, 11-16
 end_step="16"	# 01-05, 11-16  # 17 monitoring option
 
-cometdev='0' # shortcut to use COMET's experimental/dev functions. At this moment, '1' will turn on the nullification. Recommended: 0
+cometdev='1' # shortcut to use COMET's experimental/dev functions. At this moment, '1' will turn on the nullification. Recommended: 0
 # sbovl='n' # if 'y', LiCSBAS will apply on sbovls  ## TODO
 eqoffs="n"  # if 'y', it will do: get_eq_offsets, then invert. if singular_gauss, then set use of model (not recommended now, experimental/need some work).
 nlook="1"	# multilook factor, used in step02
@@ -42,11 +42,11 @@ freq="" # default: 5.405e9 Hz
 run_reunwrapping='n' # y/n. default: 'n'. Reunwrapping would use 02to05 script instead of the original 02[,03,04,05]
 
 ### Optional steps (03-05) ###
-order_op03_05="03 04 05"	# can change order e.g., 05 03 04
+order_op03_05="05 04 03"	# can change order e.g., 05 03 04
 do03op_GACOS="n"	# y/n
-do04op_mask="n"	# y/n
+do04op_mask="y"	# y/n
 do05op_clip="n"	# y/n
-p04_mask_coh_thre_avg=""	# e.g. 0.2
+p04_mask_coh_thre_avg="0.05"	# e.g. 0.2
 p04_mask_coh_thre_ifg=""	# e.g. 0.2
 p04_mask_range=""	# e.g. 10:100/20:200 (ix start from 0)
 p04_mask_range_file=""	# Name of file containing range list
@@ -78,25 +78,25 @@ p11_coh_thre=""	# default: 0.05
 p11_s_param="n" # y/n
 p11_sbovl="n"
 p11_updatemonitoring="" #y/n default n
-p120_use="n"  # y/n
+p120_use="y"  # y/n
 p120_sbovl="n"
-p12_loop_thre=""	# default: 1.5 rad. With --nullify, recommended higher value (as this is an average over the whole scene)
+p12_loop_thre="8"	# default: 1.5 rad. With --nullify, recommended higher value (as this is an average over the whole scene)
 p12_multi_prime="y"	# y/n. y recommended
-p12_nullify="" # y/n. y recommended
+p12_nullify="y" # y/n. y recommended
 p12_rm_ifg_list=""	# List file containing ifgs to be manually removed
 p12_skippngs="" # y/n. n by default
 p13_nullify_noloops="" # y/n. n by default
 p13_singular="" # y/n. n by default
-p13_singular_gauss="" # y/n. n by default
+p13_singular_gauss="y" # y/n. n by default
 p13_skippngs="" # y/n. n by default
 p13_sbovl="n"
 p15_coh_thre=""	# default: 0.05
 p15_n_unw_r_thre=""	# default: 1.5
 p15_vstd_thre=""	# default: 100 mm/yr
 p15_maxTlen_thre=""	# default: 1 yr
-p15_n_gap_thre=""	# default: 10
+p15_n_gap_thre="2"	# default: 10
 p15_stc_thre=""	# default: 10 mm
-p15_n_ifg_noloop_thre=""	# default: 500 - setting this much higher than orig since we nullify them (p13_nullify_noloops)
+p15_n_ifg_noloop_thre="200"	# default: 500 - setting this much higher than orig since we nullify them (p13_nullify_noloops)
 p15_n_loop_err_thre=""	# default: 5
 p15_n_loop_err_ratio_thre=""	# default: 0.7 - in future we will switch to this ratio term, instead of n_loop_err
 p15_resid_rms_thre=""	# default: 15 mm

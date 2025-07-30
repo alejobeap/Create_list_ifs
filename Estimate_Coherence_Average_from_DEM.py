@@ -42,6 +42,39 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
             min_lat = lat - buffer_deg
             max_lat = lat + buffer_deg
 
+
+                        # Leer toda la banda 1 (elevación completa)
+            elevacion = src.read(1)
+
+            # Enmascarar valores nodata (convertirlos en np.nan)
+            elevacion = np.where(elevacion == src.nodata, np.nan, elevacion)
+
+            # Calcular máximos y mínimos ignorando los np.nan
+            maxelevacion = np.nanmax(elevacion)
+            minelevacion = np.nanmin(elevacion)
+
+
+            # Get current working directory
+            cwd = os.getcwd()
+
+            # Extract parts of the path (e.g., .../Erta/079D)
+            parts = cwd.strip("/").split("/")
+            erta = parts[-2]
+            code = parts[-1]
+
+            # Construct filename
+            filename = f"{erta}_{code}_heigh.txt"
+            filepath = os.path.join(cwd, filename)
+
+            # Calculate adjusted values
+            h_cima_adj = maxelevacion + 10
+            h_base_adj = minelevacion - 10
+
+            # Write to file
+            with open(filepath, "w") as f:
+                f.write(f"{h_cima_adj:.0f} {h_base_adj:.0f}\n")
+
+
             window = from_bounds(min_lon, min_lat, max_lon, max_lat, src.transform)
             elevation = src.read(1, window=window)
             elevation = np.where(elevation == src.nodata, np.nan, elevation)
@@ -88,26 +121,6 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
             print(f"Distancia mínima cima-base: {min_dist:.1f} m")
             print(f"Distancia máxima cima-base: {max_dist:.1f} m")
 
-
-                        # Get current working directory
-            cwd = os.getcwd()
-            
-            # Extract parts of the path (e.g., .../Erta/079D)
-            parts = cwd.strip("/").split("/")
-            erta = parts[-2]
-            code = parts[-1]
-            
-            # Construct filename
-            filename = f"{erta}_{code}_heigh.txt"
-            filepath = os.path.join(cwd, filename)
-            
-            # Calculate adjusted values
-            h_cima_adj = h_cima + 20
-            h_base_adj = h_base - 20
-            
-            # Write to file
-            with open(filepath, "w") as f:
-                f.write(f"{h_cima_adj:.0f} {h_base_adj:.0f}\n")
 
             # Usar distancia máxima con margen 10%
             cut_size_m = min_dist * 1.1

@@ -88,6 +88,27 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
             print(f"Distancia mínima cima-base: {min_dist:.1f} m")
             print(f"Distancia máxima cima-base: {max_dist:.1f} m")
 
+
+                        # Get current working directory
+            cwd = os.getcwd()
+            
+            # Extract parts of the path (e.g., .../Erta/079D)
+            parts = cwd.strip("/").split("/")
+            erta = parts[-2]
+            code = parts[-1]
+            
+            # Construct filename
+            filename = f"{erta}_{code}_heigh.txt"
+            filepath = os.path.join(cwd, filename)
+            
+            # Calculate adjusted values
+            h_cima_adj = h_cima + 20
+            h_base_adj = h_base - 20
+            
+            # Write to file
+            with open(filepath, "w") as f:
+                f.write(f"{h_cima_adj:.0f} {h_base_adj:.0f}\n")
+
             # Usar distancia máxima con margen 10%
             cut_size_m = min_dist * 1.1
             cut_size_deg = cut_size_m / 111000  # m a grados aprox.

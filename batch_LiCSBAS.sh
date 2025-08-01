@@ -38,6 +38,9 @@ log="$logdir/$(date +%Y%m%d%H%M)$(basename $0 .sh)_${start_step}_${end_step}.log
 
 freq="" # default: 5.405e9 Hz
 
+
+maxheigh=$(awk '{print $1}' *_heigh.txt | sort -nr | head -1)
+minheigh=$(awk '{print $2}' *_heigh.txt | sort -nr | head -1)
 ### Running the updated pipelines:
 run_reunwrapping='n' # y/n. default: 'n'. Reunwrapping would use 02to05 script instead of the original 02[,03,04,05]
 
@@ -107,9 +110,9 @@ p16_filtwidth_km=""	# default: 2 km
 p16_filtwidth_yr=""	# default: avg_interval*3 yr
 p16_deg_deramp=""	# 1, bl, or 2. default: no deramp
 p16_demerr="n"	# y/n. default: n
-p16_hgt_linear="n"	# y/n. default: n
-p16_hgt_min=""	# default: 200 (m)
-p16_hgt_max=""  # default: 10000 (m)
+p16_hgt_linear="y"	# y/n. default: n
+p16_hgt_min=$minheigh #""	# default: 200 (m)
+p16_hgt_max=$maxheigh #""  # default: 10000 (m)
 p16_range=""	# e.g. 10:100/20:200 (ix start from 0)
 p16_range_geo=""	# e.g. 130.11/131.12/34.34/34.6 (in deg)
 p16_ex_range=""	# e.g. 10:100/20:200 (ix start from 0)

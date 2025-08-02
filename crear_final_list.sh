@@ -84,6 +84,6 @@ parent_dir=$(basename "$(dirname "$(pwd)")")
 current_dir=$(basename "$(pwd)")
 
 
-echo "framebatch_gapfill.sh -l -I /work/scratch-pw3/licsar/alejobea/batchdir/${parent_dir}/${current_dir}/IFSforLiCSBAS_${current_dir}_${parent_dir}.txt 5 200 7 2"
+echo "framebatch_gapfill.sh -l -N -I /work/scratch-pw3/licsar/alejobea/batchdir/${parent_dir}/${current_dir}/IFSforLiCSBAS_${current_dir}_${parent_dir}.txt 5 200 7 2"
 
-framebatch_gapfill.sh -l -I /work/scratch-pw3/licsar/alejobea/batchdir/${parent_dir}/${current_dir}/IFSforLiCSBAS_${current_dir}_${parent_dir}.txt 5 200 7 2
+framebatch_gapfill.sh -l -N -I /work/scratch-pw3/licsar/alejobea/batchdir/${parent_dir}/${current_dir}/IFSforLiCSBAS_${current_dir}_${parent_dir}.txt 5 200 7 2

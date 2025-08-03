@@ -14,9 +14,20 @@ for dir in "$base_dir"/2*/; do
     # Verifica si es un directorio
     [ -d "$dir" ] || continue
 
-    # Verifica si contiene archivos que terminan en geo.unw.png
+    # Verifica si NO existen archivos .png o .tif requeridos
+    png_missing=false
+    tif_missing=false
+
     if ! ls "$dir"/*geo.unw.png 1>/dev/null 2>&1; then
-        # Imprime solo el nombre de la carpeta (sin ruta GEOC/)
+        png_missing=true
+    fi
+
+    if ! ls "$dir"/*geo.unw.tif 1>/dev/null 2>&1; then
+        tif_missing=true
+    fi
+
+    # Si falta al menos uno de los dos, escribe el nombre del directorio
+    if $png_missing || $tif_missing; then
         basename "$dir" >> "$output_file"
     fi
 done

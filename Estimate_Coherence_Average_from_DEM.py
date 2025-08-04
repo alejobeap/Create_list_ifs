@@ -71,8 +71,8 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
             h_base_adj = minelevacion - 10
 
             # Write to file
-            with open(filepath, "w") as f:
-                f.write(f"{h_cima_adj:.0f} {h_base_adj:.0f}\n")
+            #with open(filepath, "w") as f:
+            #    f.write(f"{h_cima_adj:.0f} {h_base_adj:.0f}\n")
 
 
             window = from_bounds(min_lon, min_lat, max_lon, max_lat, src.transform)
@@ -132,6 +132,21 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
             max_lat_cut = lat + cut_size_deg / 2
 
             print(f"Ventana cuadrada en grados: lon[{min_lon_cut:.4f}, {max_lon_cut:.4f}], lat[{min_lat_cut:.4f}, {max_lat_cut:.4f}]")
+
+            # Usar distancia máxima con margen 10%
+            cut_size_m_2 = max_dist
+            cut_size_deg_2 = cut_size_m_2 / 111000  # m a grados aprox.
+
+            min_lon_cut2 = lon - cut_size_deg_2 / 2
+            max_lon_cut2 = lon + cut_size_deg_2 / 2
+            min_lat_cut2 = lat - cut_size_deg_2 / 2
+            max_lat_cut2 = lat + cut_size_deg_2 / 2
+
+            print(f"Ventana cuadrada en grados para futuro recorte: lon[{min_lon_cut2:.4f}, {max_lon_cut2:.4f}], lat[{min_lat_cut2:.4f}, {max_lat_cut2:.4f}]")
+
+                        # Write to file
+            with open(filepath, "w") as f:
+                f.write(f"{h_cima_adj:.0f} {h_base_adj:.0f} {min_lon_cut:.4f}/{max_lon_cut:.4f}/{min_lat_cut:.4f}/{max_lat_cut:.4f} {min_lon_cut2:.4f}/{max_lon_cut2:.4f}/{min_lat_cut2:.4f}/{max_lat_cut2:.4f}\n")
 
             return window, (min_lon_cut, max_lon_cut, min_lat_cut, max_lat_cut), hgt_path
     except Exception as e:

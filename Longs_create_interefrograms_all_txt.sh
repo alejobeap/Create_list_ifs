@@ -7,11 +7,11 @@ Chilescase="n"
 
 
 if [ ! -f "$INPUT_FILE" ]; then
-    echo "❌ Input file $INPUT_FILE not found!"
+    echo "Input file $INPUT_FILE not found!"
     exit 1
 fi
 
-echo "🧹 Initializing output file..."
+echo "Initializing output file..."
 > "$OUTPUT_FILE"
 
 # Leer fechas ordenadas
@@ -229,7 +229,7 @@ for ((i = 0; i < ${#years[@]} - 1; i++)); do
     y1=${years[i]}
     y2=${years[i+1]}
     if ! exists_connection_between_years "$y1" "$y2"; then
-        echo "⚠️ No existe conexión entre $y1 y $y2, forzando combinaciones..."
+        echo "No existe conexión entre $y1 y $y2, forzando combinaciones..."
         force_connections_between_years "$y1" "$y2"
     fi
 done
@@ -302,7 +302,7 @@ force_connections_per_date_to_next_year() {
         done
 
         if (( connections_count < 2 )); then
-            echo "⚠️ No se pudo completar 2 conexiones para $date, sólo se agregaron $connections_count."
+            echo "No se pudo completar 2 conexiones para $date, sólo se agregaron $connections_count."
         fi
     fi
 }
@@ -316,6 +316,4 @@ done
 generate_extra_month_combinations "${dates_last_two_years[@]}"
 
 line_count=$(wc -l < "$OUTPUT_FILE")
-echo "📄 Número total de combinaciones generadas: $line_count"
-
-echo "✅ Script finalizado."
+echo "Número total de combinaciones generadas: $line_count"

@@ -33,6 +33,51 @@ is_valid_diff_months() {
     [[ "$diff" -eq 6 || "$diff" -eq 9 || "$diff" -eq 12 || "$diff" -eq 15 ]]
 }
 
+
+# Meses adicionales para los dos últimos años
+extra_months=(2 3 4 5 6)
+
+# Obtener los dos últimos años ordenados
+sorted_years=($(cut -c1-4 "$INPUT_FILE" | sort -u))
+last_year=${sorted_years[-1]}
+second_last_year=${sorted_years[-2]}
+
+# Filtrar fechas de los dos últimos años
+dates_last_two_years=()
+for d in "${dates[@]}"; do
+    y=${d:0:4}
+    if [[ "$y" == "$last_year" || "$y" == "$second_last_year" ]]; then
+        dates_last_two_years+=("$d")
+    fi
+done
+
+# Función para generar combinaciones con los meses extra para los dos últimos años
+generate_extra_month_combinations() {
+    local dates_arr=("$@")
+    declare -A combinations_added
+
+    for ((i=0; i < ${#dates_arr[@]}; i++)); do
+        local start_date="${dates_arr[i]}"
+        for ((j = i + 1; j < ${#dates_arr[@]}; j++)); do
+            local end_date="${dates_arr[j]}"
+            local diff_months=$(month_diff "$start_date" "$end_date")
+
+            for m in "${extra_months[@]}"; do
+                if [[ "$diff_months" -eq "$m" ]]; then
+                    local combo_key="${start_date}_${end_date}"
+                    local combo_key_rev="${end_date}_${start_date}"
+                    # Evitar duplicados
+                    if [[ -z "${combinations_added[$combo_key]}" && -z "${combinations_added[$combo_key_rev]}" ]]; then
+                        echo "$combo_key" >> "$OUTPUT_FILE"
+                        combinations_added["$combo_key"]=1
+                    fi
+                fi
+            done
+        done
+    done
+}
+
+
 # Function to check if a date falls in the excluded months (June to September)
 # Only applies the check if Chilescase == "y"
 # Defaults Chilescase to "n" if undefined or invalid
@@ -265,6 +310,10 @@ force_connections_per_date_to_next_year() {
 for date in "${dates[@]}"; do
     force_connections_per_date_to_next_year "$date"
 done
+
+
+# Llamar la función para los dos últimos años
+generate_extra_month_combinations "${dates_last_two_years[@]}"
 
 line_count=$(wc -l < "$OUTPUT_FILE")
 echo "📄 Número total de combinaciones generadas: $line_count"

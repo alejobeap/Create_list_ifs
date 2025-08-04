@@ -52,3 +52,9 @@ months_regex=$(IFS='|'; echo "${valid_months[*]}")
 
 # Filtrar fechas cuyo mes esté en los meses válidos
 grep -E "^....(${months_regex})" "$dates_longs_file" > "$dates_longs_filter_file"
+
+# Añadir las últimas 10 entradas del directorio RSLC al dates_longs_filter_file, sin duplicados
+ls RSLC -1 | tail -n 10 >> "$dates_longs_filter_file"
+
+# Eliminar duplicados y ordenar
+sort -u "$dates_longs_filter_file" -o "$dates_longs_filter_file"

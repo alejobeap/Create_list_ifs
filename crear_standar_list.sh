@@ -81,4 +81,4 @@ done
 
 # Final output
 line_count=$(wc -l < "$OUTPUT_FILE_2")
-echo "📄 Número total de combinaciones generadas: $line_count"
+echo "Número total de combinaciones generadas: $line_count"

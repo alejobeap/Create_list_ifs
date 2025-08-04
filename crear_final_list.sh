@@ -77,7 +77,7 @@ echo "Delete empty folders in GEOC"
 ./deletefolder_GEOC.sh
 
 line_count=$(wc -l < "$output")
-echo "📄 Número total de combinaciones generadas: $line_count"
+echo "Número total de combinaciones generadas: $line_count"
 
 
 parent_dir=$(basename "$(dirname "$(pwd)")")

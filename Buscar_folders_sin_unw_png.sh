@@ -65,7 +65,7 @@ cat "$archivo_otros" "$archivo_mayo_sep" > "$archivo"
 # Limpiar archivos temporales
 rm "$archivo_otros" "$archivo_mayo_sep"
 
-while IFS= read -r linea; do echo $linea; rm -rf GEOC/$linea/*unw* ; done < listaunwpng.txt
+while IFS= read -r linea; do echo $linea; rm -rf GEOC/$linea/*unw*tif ; done < listaunwpng.txt
 
 line_count=$(wc -l < "$archivo")
 echo "📄 Número total de combinaciones generadas: $line_count"

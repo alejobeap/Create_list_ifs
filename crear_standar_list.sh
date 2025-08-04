@@ -16,17 +16,15 @@ month_diff() {
     echo $(((end_year - start_year) * 12 + (end_month - start_month)))
 }
 
-
 # Function to check if a date falls in the excluded months (June to September)
-# Only applies the check if Chilescase == "y"
-# Defaults Chilescase to "n" if undefined or invalid
+# Only applies the check if Chilescase == 1
 is_excluded_month() {
     local date="$1"
     local month=$((10#${date:4:2}))  # Extract the month from date
 
-    # Default Chilescase to "n" if not "y"1 or 0
+    # Default Chilescase to 0 if not 1 or 0
     if [[ "$Chilescase" != 1 && "$Chilescase" != 0 ]]; then
-        Chilescase="n"
+        Chilescase=0
     fi
 
     if [[ "$Chilescase" == 1 ]]; then
@@ -39,8 +37,6 @@ is_excluded_month() {
         return 1  # Not excluded
     fi
 }
-
-
 
 # Ensure the input file exists
 if [ ! -f "$INPUT_FILE" ]; then
@@ -61,8 +57,17 @@ mapfile -t lines < "$INPUT_FILE"
 
 # Loop over lines and create valid combinations
 for ((i=0; i<${#lines[@]}; i++)); do
-    for ((j=i+1; j<i+4 && j<${#lines[@]}; j++)); do
-        date1="${lines[i]}"
+    date1="${lines[i]}"
+    year1=${date1:0:4}
+
+    # Determine the number of combinations based on year
+    if (( year1 >= 2014 && year1 <= 2017 )); then
+        max_j=$((i+5))  # 4 combinations
+    else
+        max_j=$((i+4))  # 3 combinations
+    fi
+
+    for ((j=i+1; j<max_j && j<${#lines[@]}; j++)); do
         date2="${lines[j]}"
         
         # Skip if either date is in excluded months
@@ -70,11 +75,10 @@ for ((i=0; i<${#lines[@]}; i++)); do
             continue
         fi
         
-
         echo "${date1}_${date2}" >> "$OUTPUT_FILE_2"
-    
     done
 done
 
+# Final output
 line_count=$(wc -l < "$OUTPUT_FILE_2")
 echo "📄 Número total de combinaciones generadas: $line_count"

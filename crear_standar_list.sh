@@ -63,6 +63,9 @@ for ((i=0; i<${#lines[@]}; i++)); do
     # Determine the number of combinations based on year
     if (( year1 >= 2014 && year1 <= 2017 )); then
         max_j=$((i+5))  # 4 combinations
+    # Determine the number of combinations based on year
+    elif (( year1 >= 2025 && year1 <= 2026 )); then
+        max_j=$((i+5))  # 4 combinations
     else
         max_j=$((i+4))  # 3 combinations
     fi

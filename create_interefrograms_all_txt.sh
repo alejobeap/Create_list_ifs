@@ -41,5 +41,5 @@ done
 
 echo "Short combinations written to $OUTPUT_FILE_2"
 line_count=$(wc -l < "$OUTPUT_FILE_2")
-echo "📄 Número total de combinaciones generadas: $line_count"
+echo "Número total de combinaciones generadas: $line_count"
 

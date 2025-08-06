@@ -1,7 +1,7 @@
 #!/bin/bash
 source $LiCSARpath/lib/LiCSAR_bash_lib.sh
-#10 is approx coh 0.04
-cohthr=25
+
+cohthr=10  # cohthr = coh * 255, i.e. 10 is approx coh 0.04
 
 # M. Lazecky, 2021
 
@@ -30,12 +30,17 @@ if [ -z $maskfile ]; then
  maskfile=$LiCSAR_public/$track/$frame/metadata/$frame.geo.landmask.tif
 fi
 ifg=$ifgdir/$ifgid.geo.diff_pha.tif
-coh=$ifgdir/$ifgid.geo.cc.tif
+coh=$ifgdir/$ifgid.geo.filt.cc.tif
+if [ -f $coh ]; then
+  echo "found filtered coherence tif file - increasing coherence threshold to 0.4"
+  cohthr=102
+else
+  coh=$ifgdir/$ifgid.geo.cc.tif
+fi
 outunw=$ifgdir/$ifgid.geo.unw.tif
-outunwpng=$ifgdir/$ifgid.geo.unw.png
 
-if [ -f $outunw ] && [ -f $outunwpng ] ; then
- echo "the Unw file already exists, cancelling"
+if [ -f $outunw ]; then
+ echo "the unw file already exists, cancelling"
  exit
 fi
 

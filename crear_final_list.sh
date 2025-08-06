@@ -4,11 +4,13 @@ parent_dir=$(basename "$(dirname "$(pwd)")")
 current_dir=$(basename "$(pwd)")
 
 
+subsetnumero=$(python3 VER_Nombre_volcan_V2.py "$parent_dir" | tr -d '[]')
+
 scp -r GEOC/geo/* GEOC/
 # Define file names
 file1="standar_list.txt"
 file2="Longs_combination_longs.txt"
-output="IFSforLiCSBAS_${current_dir}_${parent_dir}.txt"
+output="IFSforLiCSBAS_${current_dir}_${parent_dir}_${subsetnumero}.txt"
 Chilescase=0
 
 # Check if both input files exist
@@ -84,6 +86,6 @@ parent_dir=$(basename "$(dirname "$(pwd)")")
 current_dir=$(basename "$(pwd)")
 
 
-echo "framebatch_gapfill.sh -l -N -I /work/scratch-pw3/licsar/alejobea/batchdir/${parent_dir}/${current_dir}/IFSforLiCSBAS_${current_dir}_${parent_dir}.txt 5 200 7 2"
+echo "framebatch_gapfill.sh -l -N -I /work/scratch-pw3/licsar/alejobea/batchdir/${parent_dir}/${current_dir}/IFSforLiCSBAS_${current_dir}_${parent_dir}_${subsetnumero}.txt 5 200 7 2"
 
-framebatch_gapfill.sh -l -N -I /work/scratch-pw3/licsar/alejobea/batchdir/${parent_dir}/${current_dir}/IFSforLiCSBAS_${current_dir}_${parent_dir}.txt 5 200 7 2
+framebatch_gapfill.sh -l -N -I /work/scratch-pw3/licsar/alejobea/batchdir/${parent_dir}/${current_dir}/IFSforLiCSBAS_${current_dir}_${parent_dir}_${subsetnumero}.txt 5 200 7 2

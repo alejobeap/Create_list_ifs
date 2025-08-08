@@ -22,7 +22,7 @@ echo "Create wrap and cc for shorters connections (2 for each epoch)"
 # Guardar la segunda parte como un pequeño script temporal
 cat << 'EOF' > run_later.sh
 #!/bin/bash
-sleep 7200  # Esperar 2 horas
+sleep 2000  # Esperar 2 horas
 
 echo "Estimated the average coherence"
 python Estimate_Coherence_Average_from_DEM.py
@@ -34,13 +34,10 @@ python matriz_coherencia.py
 ./crear_standar_list.sh
 ./crear_final_list.sh
 
-
-sleep 10800  # Esperar 2 horas
+sleep 2000  # Esperar 2 horas
 ./deletefolder_GEOC.sh
-#./GAPS_GEOC.sh
-
-
-sleep 10800  # Esperar 2 horas
+./Buscar_folders_sin_unw_png.sh
+python Buscar_empty_tifs_2_delete.py
 ./Buscar_folders_sin_unw_png.sh
 ./unwrap_run.sh
 

@@ -24,7 +24,7 @@
 start_step="02"	# 01-05, 11-16
 end_step="16"	# 01-05, 11-16  # 17 monitoring option
 
-cometdev='1' # shortcut to use COMET's experimental/dev functions. At this moment, '1' will turn on the nullification. Recommended: 0
+cometdev='0' # shortcut to use COMET's experimental/dev functions. At this moment, '1' will turn on the nullification. Recommended: 0
 # sbovl='n' # if 'y', LiCSBAS will apply on sbovls  ## TODO
 eqoffs="n"  # if 'y', it will do: get_eq_offsets, then invert. if singular_gauss, then set use of model (not recommended now, experimental/need some work).
 nlook="2"	# multilook factor, used in step02

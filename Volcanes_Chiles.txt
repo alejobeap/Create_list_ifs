@@ -17,6 +17,8 @@ Erta 40.666 13.601 20
 Cotopaxi -78.436 -0.677 20
 Reventador -77.656 -0.077 20
 Domuyo -70.432 -36.638 20
-Chaitem -72.6514, -42.8349 20
+Chaiten -72.6514, -42.8349 20
 Stromboli 15.213 38.789 20
 Palma -17.83 28.57 20
+Sabancaya -71.8572 -15.7847 20
+Krasheninnikov 160.2781 54.6103 20

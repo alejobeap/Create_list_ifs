@@ -143,7 +143,9 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
             max_lat_cut2 = lat + cut_size_deg_2 / 2
 
             print(f"Ventana cuadrada en grados para futuro recorte: lon[{min_lon_cut2:.4f}, {max_lon_cut2:.4f}], lat[{min_lat_cut2:.4f}, {max_lat_cut2:.4f}]")
-
+            
+            h_base_adj = max(h_base_adj, 0)
+            
                         # Write to file
             with open(filepath, "w") as f:
                 f.write(f"{h_cima_adj:.0f} {h_base_adj:.0f} {min_lon_cut:.4f}/{max_lon_cut:.4f}/{min_lat_cut:.4f}/{max_lat_cut:.4f} {min_lon_cut2:.4f}/{max_lon_cut2:.4f}/{min_lat_cut2:.4f}/{max_lat_cut2:.4f}\n")

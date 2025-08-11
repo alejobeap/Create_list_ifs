@@ -22,3 +22,159 @@ Stromboli 15.213 38.789 20
 Palma -17.83 28.57 20
 Sabancaya -71.8572 -15.7847 20
 Krasheninnikov 160.2781 54.6103 20
+Etna 14.999 37.748
+Dabbahu 40.48 12.595
+"Manda Hararo" 40.82 12.17
+"Lengai. Ol Doinyo" 35.914 -2.764
+Nyamulagira 29.2 -1.408
+Nyiragongo 29.25 -1.52
+Cameroon 9.17 4.203
+Karthala 43.38 -11.75
+"Fournaise. Piton de la" 55.708 -21.244
+Heard 73.513 -53.106
+"Whakaari/White Island" 177.17999 -37.52
+Tofua -175.07001 -19.75
+Kadovar 144.588 -3.608
+Manam 145.037 -4.08
+Karkar 145.976 -4.647
+"Ritter Island" 148.11501 -5.519
+Langila 148.42 -5.525
+Krummel-Garbuna-Welcker 150.02699 -5.416
+Witori 150.51601 -5.576
+Ulawun 151.33 -5.05
+Rabaul 152.203 -4.271
+Bagana 155.196 -6.137
+Kavachi 157.979 -8.991
+Tinakula 165.804 -10.386
+Ambae 167.83501 -15.389
+Ambrym 168.12 -16.25
+Yasur 169.44701 -19.532
+"Barren Island" 93.858 12.278
+"Peuet Sague" 96.289 4.903
+Sinabung 98.392 3.17
+Marapi 100.474 -0.38
+Talang 100.681 -0.979
+Kerinci 101.264 -1.697
+Kaba 102.615 -3.522
+Dempo 103.121 -4.016
+Krakatau 105.423 -6.102
+"Tangkuban Parahu" 107.6 -6.77
+Papandayan 107.73 -7.32
+Slamet 109.208 -7.242
+"Dieng Volcanic Complex" 109.879 -7.2
+Kelud 112.314 -7.935
+Semeru 112.922 -8.108
+"Tengger Caldera" 112.95 -7.942
+Raung 114.056 -8.119
+Ijen 114.242 -8.058
+Batur 115.375 -8.242
+Agung 115.508 -8.343
+Rinjani 116.47 -8.42
+"Sangeang Api" 119.07 -8.2
+Ranakah 120.52 -8.62
+Inielika 120.98 -8.73
+Paluweh 121.708 -8.32
+Egon 122.455 -8.676
+Lewotobi 122.775 -8.542
+Leroboleng 122.833 -8.365
+Iliboleng 123.258 -8.342
+Lewotolok 123.508 -8.274
+Iliwerung 123.573 -8.532
+"Tara. Batu" 123.585 -7.791
+Sirung 124.13 -8.508
+Ambang 124.42 0.75
+Soputan 124.737 1.112
+Lokon-Empung 124.792 1.358
+Karangetang 125.407 2.781
+Awu 125.447 3.689
+Dukono 127.894 1.693
+Ibu 127.63 1.488
+Gamkonora 127.53 1.38
+Gamalama 127.33 0.8
+Kanlaon 123.132 10.412
+Bulusan 124.056 12.769
+Mayon 123.685 13.257
+Pinatubo 120.35 15.13
+Suwanosejima 129.714 29.638
+Kuchinoerabujima 130.217 30.443
+Aira 130.657 31.593
+Kirishimayama 130.862 31.934
+Unzendake 130.299 32.761
+Asosan 131.104 32.884
+Kujusan 131.24899 33.086
+Hakoneyama 139.021 35.233
+Ontakesan 137.48 35.893
+Yakedake 137.58701 36.227
+Niigata-Yakeyama 138.036 36.921
+Asamayama 138.52299 36.406
+Kusatsu-Shiranesan 138.528 36.618
+Adatarayama 140.28101 37.647
+Akita-Yakeyama 140.757 39.964
+Izu-Oshima 139.394 34.724
+Miyakejima 139.526 34.094
+Nishinoshima 140.87399 27.247
+Hokkaido-Komagatake 140.677 42.063
+Toya 140.839 42.544
+Tokachidake 142.686 43.418
+Akan 144.013 43.384
+Chirpoi 150.871 46.532
+"Sarychev Peak" 153.2 48.092
+Raikoke 153.25 48.292
+Chirinkotan 153.48 48.98
+Sinarka 154.18201 48.873
+Chikurachki 155.461 50.324
+Ebeko 156.01401 50.686
+Alaid 155.565 50.861
+Kambalny 156.875 51.306
+Koryaksky 158.71201 53.321
+Avachinsky 158.836 53.256
+Zhupanovsky 159.14999 53.589
+Karymsky 159.44299 54.049
+Bezymianny 160.595 55.972
+Klyuchevskoy 160.642 56.056
+Sheveluch 161.36 56.653
+Semisopochnoi 179.58 51.93
+"Great Sitkin" -176.13 52.076
+Cleveland -169.944 52.825
+Bogoslof -168.03 53.93
+Shishaldin -163.97 54.756
+Pavlof -161.894 55.417
+Veniaminof -159.38 56.17
+"St. Helens" -122.18 46.2
+Kilauea -155.287 19.421
+Colima -103.62 19.514
+Popocatepetl -98.622 19.023
+"Santa Maria" -91.552 14.757
+"Santa Ana" -89.63 13.853
+"San Salvador" -89.294 13.734
+"San Miguel" -88.269 13.434
+"San Cristobal" -87.004 12.702
+Telica -86.84 12.606
+"Negro. Cerro" -86.702 12.506
+Momotombo -86.539 12.423
+Masaya -86.165 11.985
+Concepcion -85.622 11.538
+"Rincon de la Vieja" -85.324 10.83
+Poas -84.233 10.2
+Irazu -83.852 9.979
+Turrialba -83.767 10.025
+"Huila. Nevado del" -76.03 2.93
+Galeras -77.37 1.22
+Tungurahua -78.442 -1.467
+Wolf -91.35 0.02
+"Negra. Sierra" -91.17 -0.83
+Ubinas -70.903 -16.355
+Planchon-Peteroa -70.568 -35.223
+Calbuco -72.618 -41.33
+"Hudson. Cerro" -72.97 -45.9
+"Soufriere Hills" -62.18 16.72
+"Watt. Morne" -61.305 15.307
+Bardarbunga -17.516 64.633
+Terceira -27.32 38.73
+Hierro -18.03 27.73
+Fogo -24.35 14.95
+Erebus 167.17 -77.53
+"Bristol Island" -26.533 -59.017
+Saunders -26.483 -57.8
+Zavodovski -27.57 -56.3
+

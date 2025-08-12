@@ -22,7 +22,8 @@ while IFS= read -r file; do
   if [[ "$mes" =~ ^0[5-9]$ || "$mes" == "10" ]]; then
         sbatch --qos=high --output=sbatch_logs/${parent_dir}_${file}_${current_dir}.out --error=sbatch_logs/${parent_dir}_${file}_${current_dir}.err --job-name=${parent_dir}_unw_${file}_${current_dir} -n 8 --time=02:59:00 --mem=32768 -p comet --account=comet_lics --partition=standard --wrap="unwrap_geo.sh `cat sourceframe.txt` $file"
   else
-        sbatch --qos=high --output=sbatch_logs/${parent_dir}_${file}_${current_dir}.out --error=sbatch_logs/${parent_dir}_${file}_${current_dir}.err --job-name=${parent_dir}_unw_${file}_${current_dir} -n 8 --time=02:59:00 --mem=65536 -p comet --account=comet_lics --partition=standard --wrap="unwrap_geo.sh `cat sourceframe.txt` $file"
+        sbatch --qos=high --output=sbatch_logs/${parent_dir}_${file}_${current_dir}.out --error=sbatch_logs/${parent_dir}_${file}_${current_dir}.err --job-name=${parent_dir}_unw_${file}_${current_dir} -n 8 --time=02:59:00 --mem=32768 -p comet --account=comet_lics --partition=standard --wrap="unwrap_geo.sh `cat sourceframe.txt` $file"  #65536
+        
   fi
   
 done < listaunwpng.txt

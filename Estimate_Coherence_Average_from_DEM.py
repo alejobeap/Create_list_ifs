@@ -70,7 +70,7 @@ def get_volcano_info(volcano_name, volcanoes_file):
 
 
 def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
-    """Calcula la distancia mÃ¡xima cima-base y ventana cuadrada para recorte."""
+    """Calcula la distancia maxima cima-base y ventana cuadrada para recorte."""
     try:
         hgt_files = glob.glob("GEOC/*.geo.hgt.tif") + glob.glob("GEOC/geo/*.geo.hgt.tif")
         if not hgt_files:
@@ -135,7 +135,7 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
 
             h_cima = elevation[row_cima_rel, col_cima_rel]
             if np.isnan(h_cima):
-                raise ValueError("ElevaciÃ³n cima es NaN")
+                raise ValueError("Elevacion cima es NaN")
 
             # Definir base como pÃ­xeles con elev <= percentil 10
             h_base = np.nanpercentile(elevation, 10)
@@ -153,15 +153,15 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
                 distances.append(dist_m)
 
             if not distances:
-                print("No se encontraron pÃ­xeles base vÃ¡lidos.")
+                print("No se encontraron pixeles base validos.")
                 return None, None, None
 
             min_dist = min(distances)
             max_dist = max(distances)
 
             print(f"Cima: {h_cima:.1f} m, Base (P10): {h_base:.1f} m")
-            print(f"Distancia mÃ­nima cima-base: {min_dist:.1f} m")
-            print(f"Distancia mÃ¡xima cima-base: {max_dist:.1f} m")
+            print(f"Distancia minima cima-base: {min_dist:.1f} m")
+            print(f"Distancia mixima cima-base: {max_dist:.1f} m")
 
 
             # Usar distancia mÃ¡xima con margen 10%
@@ -194,7 +194,7 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
 
             return window, (min_lon_cut, max_lon_cut, min_lat_cut, max_lat_cut), hgt_path
     except Exception as e:
-        print(f"Error procesando elevaciÃ³n: {e}")
+        print(f"Error procesando elevacion: {e}")
         return None, None, None
 
 def crop_and_calculate_average(file_path, bounds, save_image=False):
@@ -255,11 +255,11 @@ def main():
         print(f"Información del volcán: {volcano_info}")
         
     nombre_volcan, lon, lat, distancia = volcano_info
-    print(f"\n--- Procesando volcÃ¡n: {nombre_volcan} en ({lon}, {lat}) ---\n")
+    print(f"\n--- Procesando volcan: {nombre_volcan} en ({lon}, {lat}) ---\n")
 
     window, cut_bounds, hgt_used = get_base_distance_and_window(lon, lat)
     if window is None or cut_bounds is None:
-        print("No se pudo determinar el Ã¡rea de recorte.")
+        print("No se pudo determinar el area de recorte.")
         return
 
     with open(input_txt, "r") as f:

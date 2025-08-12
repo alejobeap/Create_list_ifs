@@ -13,19 +13,61 @@ volcanoes_file = "Volcanes_Chiles.txt"
 input_txt = "combination_shorts.txt"
 output_txt = "output_averages_from_cc_tifs.txt"
 output_txt_std = "output_std_from_cc_tifs.txt"
-
+name_file="NameVolcano.txt"
 geod = Geod(ellps="WGS84")
 
+def get_volcano_name_from_file(filename):
+    try:
+        with open(filename, "r", encoding="utf-8") as f:
+            content = f.read().strip()
+            if not content:
+                return None
+            # If there are spaces, dots or hyphens, wrap in quotes for matching
+            if any(c in content for c in [' ', '.', '-']):
+                return f'"{content}"'
+            else:
+                return content
+    except FileNotFoundError:
+        return None
+        
 def get_volcano_info(volcano_name, volcanoes_file):
     try:
-        with open(volcanoes_file, "r") as vf:
+        with open(volcanoes_file, "r", encoding="utf-8") as vf:
+            next(vf)  # Skip header line
             for line in vf:
-                nombre_volcan, lon, lat, distancia = line.strip().split()
-                if nombre_volcan.lower() == volcano_name.lower():
-                    return nombre_volcan, float(lon), float(lat), float(distancia)
+                line = line.strip()
+                if not line:
+                    continue
+                if line.startswith('"'):
+                    parts = line.split()
+                    # Get full name tokens until closing quote
+                    name_tokens = []
+                    for token in parts:
+                        name_tokens.append(token)
+                        if token.endswith('"'):
+                            break
+                    nombre_volcan = " ".join(name_tokens).strip('"')
+                    rest = parts[len(name_tokens):]
+                    if len(rest) != 3:
+                        print(f"Línea con formato inesperado: {line}")
+                        continue
+                    # Strip commas and convert floats
+                    lon = float(rest[0].rstrip(','))
+                    lat = float(rest[1].rstrip(','))
+                    distancia = float(rest[2].rstrip(','))
+                else:
+                    parts = line.split()
+                    nombre_volcan = parts[0]
+                    lon = float(parts[1].rstrip(','))
+                    lat = float(parts[2].rstrip(','))
+                    distancia = float(parts[3].rstrip(','))
+
+                if nombre_volcan.lower() == volcano_name.strip('"').lower():
+                    return nombre_volcan, lon, lat, distancia
     except Exception as e:
         print(f"Error leyendo el archivo de volcanes: {e}")
     return None
+
 
 def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
     """Calcula la distancia mÃ¡xima cima-base y ventana cuadrada para recorte."""
@@ -193,20 +235,25 @@ def main():
     current_dir = os.getcwd()
     default_volcano_name = os.path.basename(os.path.dirname(current_dir))
 
+    # Main logic to get volcano_name
     if len(sys.argv) < 2:
-        print(f"No se ingresÃ³ el nombre del volcÃ¡n. Usando valor por defecto: {default_volcano_name}")
-        volcano_name = default_volcano_name
+        print(f"No se ingresó el nombre del volcán por línea de comando.")
+        volcano_name = get_volcano_name_from_file(name_file)
+        if not volcano_name:
+            print(f"No se encontró el archivo {name_file} o está vacío. Usando valor por defecto: {default_volcano_name}")
+            volcano_name = default_volcano_name
     else:
         volcano_name = sys.argv[1]
-
-    print(f"Nombre del volcÃ¡n: {volcano_name}")
-
+    
+    print(f"Nombre del volcán: {volcano_name}")
+    
     volcano_info = get_volcano_info(volcano_name, volcanoes_file)
-
+    
     if not volcano_info:
-        print(f"VolcÃ¡n '{volcano_name}' no encontrado.")
-        return
-
+        print(f"Volcán '{volcano_name}' no encontrado.")
+    else:
+        print(f"Información del volcán: {volcano_info}")
+        
     nombre_volcan, lon, lat, distancia = volcano_info
     print(f"\n--- Procesando volcÃ¡n: {nombre_volcan} en ({lon}, {lat}) ---\n")
 

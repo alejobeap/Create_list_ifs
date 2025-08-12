@@ -1,0 +1,248 @@
+import sys
+import numpy as np
+import rasterio
+import matplotlib.pyplot as plt
+from pathlib import Path
+from rasterio.windows import from_bounds
+import glob
+import os
+from pyproj import Geod
+
+# Archivos de entrada y salida
+volcanoes_file = "Volcanes_Chiles.txt"
+input_txt = "combination_shorts.txt"
+output_txt = "output_averages_from_cc_tifs.txt"
+output_txt_std = "output_std_from_cc_tifs.txt"
+
+geod = Geod(ellps="WGS84")
+
+def get_volcano_info(volcano_name, volcanoes_file):
+    try:
+        with open(volcanoes_file, "r") as vf:
+            for line in vf:
+                nombre_volcan, lon, lat, distancia = line.strip().split()
+                if nombre_volcan.lower() == volcano_name.lower():
+                    return nombre_volcan, float(lon), float(lat), float(distancia)
+    except Exception as e:
+        print(f"Error leyendo el archivo de volcanes: {e}")
+    return None
+
+def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
+    """Calcula la distancia mÃ¡xima cima-base y ventana cuadrada para recorte."""
+    try:
+        hgt_files = glob.glob("GEOC/*.geo.hgt.tif") + glob.glob("GEOC/geo/*.geo.hgt.tif")
+        if not hgt_files:
+            raise FileNotFoundError("No se encontraron archivos .geo.hgt.tif")
+
+        hgt_path = hgt_files[0]
+        with rasterio.open(hgt_path) as src:
+            # Definir ventana amplia para asegurar cubrir base y cima
+            min_lon = lon - buffer_deg
+            max_lon = lon + buffer_deg
+            min_lat = lat - buffer_deg
+            max_lat = lat + buffer_deg
+
+
+                        # Leer toda la banda 1 (elevaciÃ³n completa)
+            elevacion = src.read(1)
+
+            # Enmascarar valores nodata (convertirlos en np.nan)
+            elevacion = np.where(elevacion == src.nodata, np.nan, elevacion)
+
+            # Calcular mÃ¡ximos y mÃ­nimos ignorando los np.nan
+            maxelevacion = np.nanmax(elevacion)
+            minelevacion = np.nanmin(elevacion)
+
+
+            # Get current working directory
+            cwd = os.getcwd()
+
+            # Extract parts of the path (e.g., .../Erta/079D)
+            parts = cwd.strip("/").split("/")
+            erta = parts[-2]
+            code = parts[-1]
+
+            # Construct filename
+            filename = f"{erta}_{code}_heigh.txt"
+            filepath = os.path.join(cwd, filename)
+
+            # Calculate adjusted values
+            h_cima_adj = maxelevacion + 10
+            h_base_adj = minelevacion - 10
+
+            # Write to file
+            #with open(filepath, "w") as f:
+            #    f.write(f"{h_cima_adj:.0f} {h_base_adj:.0f}\n")
+
+
+            window = from_bounds(min_lon, min_lat, max_lon, max_lat, src.transform)
+            elevation = src.read(1, window=window)
+            elevation = np.where(elevation == src.nodata, np.nan, elevation)
+
+            # Ãndices globales para la ventana
+            row_min, col_min = window.row_off, window.col_off
+            row_min, col_min = int(row_min), int(col_min)
+
+            # Ãndice cima local en ventana
+            row_cima, col_cima = src.index(lon, lat)
+            row_cima_rel = row_cima - row_min
+            col_cima_rel = col_cima - col_min
+
+            if not (0 <= row_cima_rel < elevation.shape[0]) or not (0 <= col_cima_rel < elevation.shape[1]):
+                raise ValueError("Coordenadas cima fuera de ventana")
+
+            h_cima = elevation[row_cima_rel, col_cima_rel]
+            if np.isnan(h_cima):
+                raise ValueError("ElevaciÃ³n cima es NaN")
+
+            # Definir base como pÃ­xeles con elev <= percentil 10
+            h_base = np.nanpercentile(elevation, 10)
+            mask_base = elevation <= h_base
+
+            # Obtener coordenadas de pÃ­xeles base
+            rows_base, cols_base = np.where(mask_base)
+
+            distances = []
+            for r, c in zip(rows_base, cols_base):
+                row_global = r + row_min
+                col_global = c + col_min
+                lon_pix, lat_pix = src.xy(row_global, col_global)
+                _, _, dist_m = geod.inv(lon, lat, lon_pix, lat_pix)
+                distances.append(dist_m)
+
+            if not distances:
+                print("No se encontraron pÃ­xeles base vÃ¡lidos.")
+                return None, None, None
+
+            min_dist = min(distances)
+            max_dist = max(distances)
+
+            print(f"Cima: {h_cima:.1f} m, Base (P10): {h_base:.1f} m")
+            print(f"Distancia mÃ­nima cima-base: {min_dist:.1f} m")
+            print(f"Distancia mÃ¡xima cima-base: {max_dist:.1f} m")
+
+
+            # Usar distancia mÃ¡xima con margen 10%
+            cut_size_m = min_dist * 1.1
+            cut_size_deg = cut_size_m / 111000  # m a grados aprox.
+
+            min_lon_cut = lon - cut_size_deg / 2
+            max_lon_cut = lon + cut_size_deg / 2
+            min_lat_cut = lat - cut_size_deg / 2
+            max_lat_cut = lat + cut_size_deg / 2
+
+            print(f"Ventana cuadrada en grados: lon[{min_lon_cut:.4f}, {max_lon_cut:.4f}], lat[{min_lat_cut:.4f}, {max_lat_cut:.4f}]")
+
+            # Usar distancia mÃ¡xima con margen 10%
+            cut_size_m_2 = max_dist
+            cut_size_deg_2 = cut_size_m_2 / 111000  # m a grados aprox.
+
+            min_lon_cut2 = lon - cut_size_deg_2 / 2
+            max_lon_cut2 = lon + cut_size_deg_2 / 2
+            min_lat_cut2 = lat - cut_size_deg_2 / 2
+            max_lat_cut2 = lat + cut_size_deg_2 / 2
+
+            print(f"Ventana cuadrada en grados para futuro recorte: lon[{min_lon_cut2:.4f}, {max_lon_cut2:.4f}], lat[{min_lat_cut2:.4f}, {max_lat_cut2:.4f}]")
+            
+            h_base_adj = max(h_base_adj, 0)
+            
+                        # Write to file
+            with open(filepath, "w") as f:
+                f.write(f"{h_cima_adj:.0f} {h_base_adj:.0f} {min_lon_cut:.4f}/{max_lon_cut:.4f}/{min_lat_cut:.4f}/{max_lat_cut:.4f} {min_lon_cut2:.4f}/{max_lon_cut2:.4f}/{min_lat_cut2:.4f}/{max_lat_cut2:.4f}\n")
+
+            return window, (min_lon_cut, max_lon_cut, min_lat_cut, max_lat_cut), hgt_path
+    except Exception as e:
+        print(f"Error procesando elevaciÃ³n: {e}")
+        return None, None, None
+
+def crop_and_calculate_average(file_path, bounds, save_image=False):
+    try:
+        with rasterio.open(file_path) as src:
+            min_lon, max_lon, min_lat, max_lat = bounds
+            window = from_bounds(min_lon, min_lat, max_lon, max_lat, src.transform)
+            data = src.read(1, window=window)
+            data = np.where(data == src.nodata, np.nan, data)
+
+            if data.size == 0 or np.all(np.isnan(data)):
+                print(f"Advertencia: No hay datos vÃ¡lidos en {file_path.name}")
+                return None, None
+
+            norm_factor = np.nanmax(data)
+            if np.isnan(norm_factor) or norm_factor == 0:
+                print(f"Advertencia: np.nanmax es invÃ¡lido o cero en {file_path.name}")
+                return None, None
+
+            data_norm = data / norm_factor
+            average = np.nanmean(data_norm)
+            standar = np.nanstd(data_norm)
+
+            if save_image:
+                plt.figure(figsize=(8, 6))
+                plt.imshow(data_norm, cmap='viridis')
+                plt.colorbar(label='Avg_Coh')
+                plt.title(f"{file_path.stem} Avg_Coh: {average:.3f}")
+                plt.savefig(f"{file_path.parent}/recorte_{file_path.stem}.png", dpi=100)
+                plt.close()
+
+            return average, standar
+    except Exception as e:
+        print(f"Error procesando {file_path}: {e}")
+        return None, None
+
+def main():
+    current_dir = os.getcwd()
+    default_volcano_name = os.path.basename(os.path.dirname(current_dir))
+
+    if len(sys.argv) < 2:
+        print(f"No se ingresÃ³ el nombre del volcÃ¡n. Usando valor por defecto: {default_volcano_name}")
+        volcano_name = default_volcano_name
+    else:
+        volcano_name = sys.argv[1]
+
+    print(f"Nombre del volcÃ¡n: {volcano_name}")
+
+    volcano_info = get_volcano_info(volcano_name, volcanoes_file)
+
+    if not volcano_info:
+        print(f"VolcÃ¡n '{volcano_name}' no encontrado.")
+        return
+
+    nombre_volcan, lon, lat, distancia = volcano_info
+    print(f"\n--- Procesando volcÃ¡n: {nombre_volcan} en ({lon}, {lat}) ---\n")
+
+    window, cut_bounds, hgt_used = get_base_distance_and_window(lon, lat)
+    if window is None or cut_bounds is None:
+        print("No se pudo determinar el Ã¡rea de recorte.")
+        return
+
+    with open(input_txt, "r") as f:
+        date_paths = f.read().splitlines()
+
+    results = []
+    resultsstd = []
+
+    for i, date_path in enumerate(date_paths):
+        file_path = Path(f"GEOC/{date_path}/{date_path}.geo.cc.tif")
+        if not file_path.exists():
+            print(f"Archivo no encontrado: {file_path}")
+            continue
+
+        save_image = (i == 0)
+        average, standar = crop_and_calculate_average(file_path, cut_bounds, save_image=save_image)
+
+        if average is not None:
+            results.append({"date": date_path, "average": average})
+            resultsstd.append({"date": date_path, "standar": standar})
+        else:
+            print(f"Sin resultado vÃ¡lido para {date_path}")
+
+    with open(output_txt, "w") as f:
+        for result in results:
+            f.write(f"{result['date']} {result['average']:.4f}\n")
+
+    with open(output_txt_std, "w") as f:
+        for resultstd in resultsstd:
+            f.write(f"{resultstd['date']} {resultstd['standar']:.4f}\n")
+
+if __name__ == "__main__":
+    main()

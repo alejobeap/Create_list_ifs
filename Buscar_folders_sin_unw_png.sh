@@ -67,5 +67,8 @@ rm "$archivo_otros" "$archivo_mayo_sep"
 
 while IFS= read -r linea; do rm -rf GEOC/$linea/*unw*tif ; done < listaunwpng.txt
 
+sort -u "$archivo"
+
+
 line_count=$(wc -l < "$archivo")
 echo "📄 Número total de combinaciones generadas: $line_count"

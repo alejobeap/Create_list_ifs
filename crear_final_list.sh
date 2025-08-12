@@ -3,8 +3,18 @@
 parent_dir=$(basename "$(dirname "$(pwd)")")
 current_dir=$(basename "$(pwd)")
 
+if [ -s NameVolcano.txt ]; then
+    name=$(cat NameVolcano.txt)
+    subsetnumero=$(python3 VER_Nombre_volcan_V2.py "$name" | tr -d '[]')
+else
+    echo "NameVolcano.txt is missing or empty"
+    subsetnumero=$(python3 VER_Nombre_volcan_V2.py "$parent_dir" | tr -d '[]')
+    exit 1
+fi
 
-subsetnumero=$(python3 VER_Nombre_volcan_V2.py "$parent_dir" | tr -d '[]')
+
+
+
 
 scp -r GEOC/geo/* GEOC/
 # Define file names

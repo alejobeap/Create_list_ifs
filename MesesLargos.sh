@@ -32,10 +32,28 @@ for key in "${!month_years[@]}"; do
     month_count["$month"]=$((month_count["$month"] + 1))
 done
 
-# Escribir a mesecrear.txt los meses que aparecen en al menos 5 años
+# Obtener el primer y último año del archivo
+first_year=$(head -n 1 "$dates_longs_file" | cut -c1-4)
+last_year=$(tail -n 1 "$dates_longs_file" | cut -c1-4)
+
+# Calcular años totales (incluyendo ambos extremos)
+total_years=$((last_year - first_year + 1))
+
+# Estimar umbral dinámico (ejemplo: ~70% del rango de años, redondeado)
+threshold=$(( total_years * 70 / 100 ))
+
+# Asegurar que el umbral sea al menos 1
+if [ "$threshold" -lt 1 ]; then
+    threshold=1
+fi
+
+echo "Rango de años: $first_year-$last_year ($total_years años)"
+echo "Umbral mínimo de años por mes: $threshold"
+
+# Usar threshold en lugar del 8 fijo
 for month in "${!month_count[@]}"; do
-    if [ "${month_count[$month]}" -ge 8 ]; then
-       echo "$month"
+    if [ "${month_count[$month]}" -ge "$threshold" ]; then
+        echo "$month"
     fi
 done | sort > "$months_file"
 

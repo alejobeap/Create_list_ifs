@@ -55,7 +55,7 @@ p04_mask_coh_thre_ifg=""	# e.g. 0.2
 p04_mask_range=""	# e.g. 10:100/20:200 (ix start from 0)
 p04_mask_range_file=""	# Name of file containing range list
 p05_clip_range=""	# e.g. 10:100/20:200 (ix start from 0)
-p05_clip_range_geo=""	# e.g. 130.11/131.12/34.34/34.6 (in deg)
+p05_clip_range_geo=$clipinfo #""	# e.g. 130.11/131.12/34.34/34.6 (in deg)
 do06op_ERA5="n" #"y"	# ERA5 apply if icams files in LiCSAR
 
 # Optional reunwrapping:

@@ -37,10 +37,11 @@ first_year=$(head -n 1 "$dates_longs_file" | cut -c1-4)
 last_year=$(tail -n 1 "$dates_longs_file" | cut -c1-4)
 
 # Calcular años totales (incluyendo ambos extremos)
-total_years=$((last_year - first_year + 1))
+total_years=$((last_year - first_year))
 
 # Estimar umbral dinámico (ejemplo: ~70% del rango de años, redondeado)
-threshold=$(( total_years * 90 / 100 ))
+threshold=$(( total_years * 8
+0 / 100 ))
 
 # Asegurar que el umbral sea al menos 1
 if [ "$threshold" -lt 1 ]; then

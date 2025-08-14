@@ -119,7 +119,7 @@ p16_range_geo=""	# e.g. 130.11/131.12/34.34/34.6 (in deg)
 p16_ex_range=""	# e.g. 10:100/20:200 (ix start from 0)
 p16_ex_range_geo=""	# e.g. 130.11/131.12/34.34/34.6 (in deg)
 p16_interpolate_nans="y"  # will interpolate nans in unmasked pixels
-p16_skippngs="" # y/n. n by default
+p16_skippngs="y" # y/n. n by default
 p16_sbovl="n"
 
 ### Less frequently used options. If blank, use default. ###

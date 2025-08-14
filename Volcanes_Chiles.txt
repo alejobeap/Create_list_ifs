@@ -177,3 +177,4 @@ Erebus 167.17 -77.53 20
 "Bristol Island" -26.533 -59.017 20
 Saunders -26.483 -57.8 20
 Zavodovski -27.57 -56.3 20
+Aso 131.085 32.8849 20

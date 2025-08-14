@@ -125,17 +125,31 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
             row_min, col_min = window.row_off, window.col_off
             row_min, col_min = int(row_min), int(col_min)
 
-            # Indice cima local en ventana
             row_cima, col_cima = src.index(lon, lat)
-            row_cima_rel = row_cima #- row_min
-            col_cima_rel = col_cima #- col_min
-
-            if not (0 <= row_cima_rel < elevation.shape[0]) or not (0 <= col_cima_rel < elevation.shape[1]):
-                raise ValueError("Coordenadas cima fuera de ventana")
-
+            
+            # First try using relative indices
+            row_cima_rel = row_cima - row_min
+            col_cima_rel = col_cima - col_min
+            
+            def check_position_and_height(row_rel, col_rel):
+                """Check if coordinates are in window and elevation is valid."""
+                if not (0 <= row_rel < elevation.shape[0]) or not (0 <= col_rel < elevation.shape[1]):
+                    return False
+                h_cima = elevation[row_rel, col_rel]
+                if np.isnan(h_cima):
+                    return False
+                return True
+            
+            # First attempt with relative indices
+            if not check_position_and_height(row_cima_rel, col_cima_rel):
+                # Second attempt using absolute indices
+                row_cima_rel = row_cima
+                col_cima_rel = col_cima
+                if not check_position_and_height(row_cima_rel, col_cima_rel):
+                    raise ValueError("Coordenadas cima fuera de ventana o Elevacion cima es NaN")
+            
+            # If we got here, h_cima is valid
             h_cima = elevation[row_cima_rel, col_cima_rel]
-            if np.isnan(h_cima):
-                raise ValueError("Elevacion cima es NaN")
 
             # Definir base como pixeles con elev <= percentil 10
             h_base = np.nanpercentile(elevation, 10)

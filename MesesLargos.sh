@@ -41,7 +41,7 @@ total_years=$((last_year - first_year))
 
 if (( total_years <= 9 )); then
     # Umbral dinámico para rangos cortos
-    threshold=$(( total_years * 80 / 100 ))
+    threshold=$(( total_years * 90 / 100 ))
 else
     # Umbral dinámico para rangos largos
     threshold=$(( total_years * 70 / 100 ))

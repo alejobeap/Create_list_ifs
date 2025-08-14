@@ -85,13 +85,13 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
             max_lat = lat + buffer_deg
 
 
-                        # Leer toda la banda 1 (elevaciÃ³n completa)
+                        # Leer toda la banda 1 (elevaciI³n completa)
             elevacion = src.read(1)
 
             # Enmascarar valores nodata (convertirlos en np.nan)
             elevacion = np.where(elevacion == src.nodata, np.nan, elevacion)
 
-            # Calcular mÃ¡ximos y mÃ­nimos ignorando los np.nan
+            # Calcular maximos y minimos ignorando los np.nan
             maxelevacion = np.nanmax(elevacion)
             minelevacion = np.nanmin(elevacion)
 
@@ -121,14 +121,14 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
             elevation = src.read(1, window=window)
             elevation = np.where(elevation == src.nodata, np.nan, elevation)
 
-            # Ãndices globales para la ventana
+            # Indices globales para la ventana
             row_min, col_min = window.row_off, window.col_off
             row_min, col_min = int(row_min), int(col_min)
 
-            # Ãndice cima local en ventana
+            # Indice cima local en ventana
             row_cima, col_cima = src.index(lon, lat)
-            row_cima_rel = row_cima - row_min
-            col_cima_rel = col_cima - col_min
+            row_cima_rel = row_cima #- row_min
+            col_cima_rel = col_cima #- col_min
 
             if not (0 <= row_cima_rel < elevation.shape[0]) or not (0 <= col_cima_rel < elevation.shape[1]):
                 raise ValueError("Coordenadas cima fuera de ventana")
@@ -137,11 +137,11 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
             if np.isnan(h_cima):
                 raise ValueError("Elevacion cima es NaN")
 
-            # Definir base como pÃ­xeles con elev <= percentil 10
+            # Definir base como pixeles con elev <= percentil 10
             h_base = np.nanpercentile(elevation, 10)
             mask_base = elevation <= h_base
 
-            # Obtener coordenadas de pÃ­xeles base
+            # Obtener coordenadas de pixeles base
             rows_base, cols_base = np.where(mask_base)
 
             distances = []
@@ -164,7 +164,7 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
             print(f"Distancia mixima cima-base: {max_dist:.1f} m")
 
 
-            # Usar distancia mÃ¡xima con margen 10%
+            # Usar distancia maxima con margen 10%
             cut_size_m = min_dist * 1.1
             cut_size_deg = cut_size_m / 111000  # m a grados aprox.
 
@@ -175,7 +175,7 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
 
             print(f"Ventana cuadrada en grados: lon[{min_lon_cut:.4f}, {max_lon_cut:.4f}], lat[{min_lat_cut:.4f}, {max_lat_cut:.4f}]")
 
-            # Usar distancia mÃ¡xima con margen 10%
+            # Usar distancia maxima con margen 10%
             cut_size_m_2 = max_dist
             cut_size_deg_2 = cut_size_m_2 / 111000  # m a grados aprox.
 
@@ -206,12 +206,12 @@ def crop_and_calculate_average(file_path, bounds, save_image=False):
             data = np.where(data == src.nodata, np.nan, data)
 
             if data.size == 0 or np.all(np.isnan(data)):
-                print(f"Advertencia: No hay datos vÃ¡lidos en {file_path.name}")
+                print(f"Advertencia: No hay datos validos en {file_path.name}")
                 return None, None
 
             norm_factor = np.nanmax(data)
             if np.isnan(norm_factor) or norm_factor == 0:
-                print(f"Advertencia: np.nanmax es invÃ¡lido o cero en {file_path.name}")
+                print(f"Advertencia: np.nanmax es invalido o cero en {file_path.name}")
                 return None, None
 
             data_norm = data / norm_factor
@@ -281,7 +281,7 @@ def main():
             results.append({"date": date_path, "average": average})
             resultsstd.append({"date": date_path, "standar": standar})
         else:
-            print(f"Sin resultado vÃ¡lido para {date_path}")
+            print(f"Sin resultado valido para {date_path}")
 
     with open(output_txt, "w") as f:
         for result in results:

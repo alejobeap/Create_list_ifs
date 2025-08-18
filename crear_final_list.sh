@@ -99,3 +99,10 @@ current_dir=$(basename "$(pwd)")
 echo "framebatch_gapfill.sh -l -N -I ${PWD}/IFSforLiCSBAS_${current_dir}_${parent_dir}_${subsetnumero}.txt 5 200 7 2"
 
 framebatch_gapfill.sh -l -N -I ${PWD}/IFSforLiCSBAS_${current_dir}_${parent_dir}_${subsetnumero}.txt 5 200 7 2
+
+
+echo "Baseline"
+mk_bperp_file.sh
+mv GEOC/baselines GEOC/baselines_web
+scp -r baselines GEOC/
+

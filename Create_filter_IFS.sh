@@ -8,6 +8,7 @@ name=$(basename "$(dirname "$(pwd)")")
 mkdir -p log
 mkdir -p GEOC
 
+echo "Create Baselines file"
 mk_bperp_file.sh
 mv GEOC/baselines GEOC/baselines_web
 scp -r baselines GEOC/

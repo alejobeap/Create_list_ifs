@@ -182,20 +182,20 @@ Aso 131.085 32.8849 20
 Askja -16.783 65.033 20
 Hekla -19.666 63.983 20
 Reykjanes -22.3650 63.9155 20
-Tupungatito -33.425 -69.797 20
-"San Jose" -33.789 -69.895 20
-Maipo -34.164 -69.832 20
-Palomo -34.608 -70.295 20
-"Atuel. Caldera del" -34.650 -70.050 20
-"Risco Plateado" -34.917 -69.981 20
-Tinguiririca -34.814 -70.352 20
-Infiernillo -35.123 -69.900 20
-Calabozos -35.558 -70.496 20
-"Descabezado Grande" -35.580 -70.750 20
-"Azul. Cerro" -35.653 -70.761 20
-"San Pedro-Pellado" -35.989 -70.849 20
-"Longavi. Nevado de" -36.193 -71.161 20
-"Blancas. Lomas" -36.286 -71.009 20
-"Resago. Volcan" -36.450 -70.920 20
-"Payun Matru" -36.422 -69.241 20
-"Tromen Volcanic Plateau" -37.144 -70.033 20
+Tupungatito -69.797 -33.425 20
+"San Jose" -69.895 -33.789 20
+Maipo -69.832 -34.164 20
+Palomo -70.295 -34.608 20
+"Atuel. Caldera del" -70.050 -34.650 20
+"Risco Plateado" -69.981 -34.917 20
+Tinguiririca -70.352 -34.814 20
+Infiernillo -69.900 -35.123 20
+Calabozos -70.496 -35.558 20
+"Descabezado Grande" -70.750 -35.580 20
+"Azul. Cerro" -70.761 -35.653 20
+"San Pedro-Pellado" -70.849 -35.989 20
+"Longavi. Nevado de" -71.161 -36.193 20
+"Blancas. Lomas" -71.009 -36.286 20
+"Resago. Volcan" -70.920 -36.450 20
+"Payun Matru" -69.241 -36.422 20
+"Tromen Volcanic Plateau" -70.033 -37.144 20

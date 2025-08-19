@@ -13,6 +13,8 @@ mk_bperp_file.sh
 mv GEOC/baselines GEOC/baselines_web
 scp -r baselines GEOC/
 
+awk '{ if ($3 > 250 || $3 < -250) print $2 }' baselines > baselinesmayor2delete.txt
+
 ## Crear jobs
 #sbatch --qos=high --output=MKIFS_${name}_${tracks}.out --error=MKIFS_${name}_${tracks}.err --job-name=MKIFS_${name}_${tracks} -n 8 --time=23:59:00 --mem=65536 -p comet --account=comet_lics --partition=standard --wrap="LiCSAR_03_mk_ifgs.py -d . -r 7 -a 2 -c 0 -i combination_shorts.txt"
 

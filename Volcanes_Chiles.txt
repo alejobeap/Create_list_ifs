@@ -1,4 +1,5 @@
 nombre_volcan lon lat distancia
+Casiri -69.7886 -17.4852 20
 Chillan -71.378 -36.868 20
 Socompa -68.246 -24.396 20
 Lascar -67.73 -23.37 10

@@ -3,13 +3,20 @@
 parent_dir=$(basename "$(dirname "$(pwd)")")
 current_dir=$(basename "$(pwd)")
 
-if [ -s NameVolcano.txt ]; then
+if [ -n "$1" ]; then
+    # If an argument was provided
     name=$(cat NameVolcano.txt)
-    subsetnumero=$(python3 VER_Nombre_volcan_V2.py "$name" | tr -d '[]')
+    subsetnumero=$1
 else
-    echo "NameVolcano.txt is missing or empty"
-    subsetnumero=$(python3 VER_Nombre_volcan_V2.py "$parent_dir" | tr -d '[]')
-    exit 1
+    if [ -s NameVolcano.txt ]; then
+        # If NameVolcano.txt exists and is not empty
+        name=$(cat NameVolcano.txt)
+        subsetnumero=$(python3 VER_Nombre_volcan_V2.py "$name" | tr -d '[]')
+    else
+        echo "NameVolcano.txt is missing or empty"
+        subsetnumero=$(python3 VER_Nombre_volcan_V2.py "$parent_dir" | tr -d '[]')
+        exit 1
+    fi
 fi
 
 

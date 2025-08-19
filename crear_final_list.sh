@@ -4,19 +4,25 @@ parent_dir=$(basename "$(dirname "$(pwd)")")
 current_dir=$(basename "$(pwd)")
 
 if [ -n "$1" ]; then
-    # If an argument was provided
-    name=$(cat NameVolcano.txt)
+    # Caso 1: argumento entregado → usarlo
+    name=$(cat NameVolcano.txt 2>/dev/null)
     subsetnumero=$1
-else
-    if [ -s NameVolcano.txt ]; then
-        # If NameVolcano.txt exists and is not empty
-        name=$(cat NameVolcano.txt)
-        subsetnumero=$(python3 VER_Nombre_volcan_V2.py "$name" | tr -d '[]')
+elif [ -s NameVolcano.txt ]; then
+    # Caso 2: No hay $1, pero existe NameVolcano.txt
+    name=$(cat NameVolcano.txt)
+    
+    if [ -s Subsetnumber.txt ]; then
+        # Si también hay Subsetnumber.txt
+        subset=$(cat Subsetnumber.txt)
     else
-        echo "NameVolcano.txt is missing or empty"
-        subsetnumero=$(python3 VER_Nombre_volcan_V2.py "$parent_dir" | tr -d '[]')
-        exit 1
+        # Si no hay Subsetnumber.txt → calcular con Python
+        subsetnumero=$(python3 VER_Nombre_volcan_V2.py "$name" | tr -d '[]')
     fi
+else
+    # Caso 3: No hay $1 ni NameVolcano.txt válido
+    echo "NameVolcano.txt is missing or empty"
+    subsetnumero=$(python3 VER_Nombre_volcan_V2.py "$parent_dir" | tr -d '[]')
+    exit 1
 fi
 
 

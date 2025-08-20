@@ -199,3 +199,4 @@ Calabozos -70.496 -35.558 20
 "Resago. Volcan" -70.920 -36.450 20
 "Payun Matru" -69.241 -36.422 20
 "Tromen Volcanic Plateau" -70.033 -37.144 20
+"Azufre. Cerro del" -68.237 -21.787 20

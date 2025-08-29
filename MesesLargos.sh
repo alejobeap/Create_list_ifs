@@ -39,17 +39,22 @@ last_year=$(tail -n 1 "$dates_longs_file" | cut -c1-4)
 # Calcular años totales (incluyendo ambos extremos)
 total_years=$((last_year - first_year))
 
-if (( total_years <= 9 )); then
-    # Umbral dinámico para rangos cortos
-    threshold=$(( total_years * 90 / 100 ))
-else
-    # Umbral dinámico para rangos largos
-    threshold=$(( total_years * 70 / 100 ))
-fi
 
-# Asegurar que el umbral sea al menos 1
-if [ "$threshold" -lt 1 ]; then
-    threshold=1
+# Si el usuario pasa un argumento, usarlo como threshold
+if [[ -n "$1" && "$1" =~ ^[0-9]+$ ]]; then
+    threshold="$1"
+else
+    # Calcular threshold dinámicamente
+    if (( total_years <= 9 )); then
+        threshold=$(( total_years * 90 / 100 ))
+    else
+        threshold=$(( total_years * 70 / 100 ))
+    fi
+
+    # Asegurar que el umbral sea al menos 1
+    if [ "$threshold" -lt 1 ]; then
+        threshold=1
+    fi
 fi
 
 echo "Rango de años: $first_year-$last_year ($total_years años)"

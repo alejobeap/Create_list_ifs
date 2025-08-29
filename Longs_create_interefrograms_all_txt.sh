@@ -328,4 +328,3 @@ elif (( line_count < 100 )); then
     ./MesesLargos.sh 9
     ./Longs_create_interefrograms_all_txt.sh
 fi
-fi

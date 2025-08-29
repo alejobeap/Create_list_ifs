@@ -317,3 +317,10 @@ generate_extra_month_combinations "${dates_last_two_years[@]}"
 
 line_count=$(wc -l < "$OUTPUT_FILE")
 echo "Número total de combinaciones generadas: $line_count"
+
+# Si el número de combinaciones es mayor que 300, volver a ejecutar con threshold 10
+if (( line_count > 300 )); then
+    echo "⚠️ Más de 300 combinaciones, reejecutando con threshold=10..."
+    ./MesesLargos.sh 10
+    ./Longs_create_interefrograms_all_txt.sh
+fi

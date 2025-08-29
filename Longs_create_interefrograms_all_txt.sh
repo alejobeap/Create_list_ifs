@@ -319,8 +319,13 @@ line_count=$(wc -l < "$OUTPUT_FILE")
 echo "Número total de combinaciones generadas: $line_count"
 
 # Si el número de combinaciones es mayor que 300, volver a ejecutar con threshold 10
-if (( line_count > 300 )); then
-    echo "⚠️ Más de 300 combinaciones, reejecutando con threshold=10..."
+if (( line_count > 400 )); then
+    echo "⚠️ Más de 400 combinaciones, reejecutando con threshold=10..."
     ./MesesLargos.sh 10
     ./Longs_create_interefrograms_all_txt.sh
+elif (( line_count < 100 )); then
+    echo "⚠️ Menos de 100 combinaciones, reejecutando con threshold=9..."
+    ./MesesLargos.sh 9
+    ./Longs_create_interefrograms_all_txt.sh
+fi
 fi

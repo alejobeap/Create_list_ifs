@@ -59,13 +59,13 @@ mapfile -t lines < "$INPUT_FILE"
 for ((i=0; i<${#lines[@]}; i++)); do
     date1="${lines[i]}"
     year1=${date1:0:4}
+    ym1=${date1:0:6}   # Año + mes (YYYYMM)
 
     # Determine the number of combinations based on year
     if (( year1 >= 2014 && year1 <= 2017 )); then
         max_j=$((i+5))  # 4 combinations
-    # Determine the number of combinations based on year
-    elif (( year1 >= 2025 && year1 <= 2026 )); then
-        max_j=$((i+5))  # 4 combinations
+    elif (( ym1 >= 202505 && year1 <= 2026 )); then
+        max_j=$((i+5))  # 4 combinations (desde mayo 2025 hasta 2026)
     else
         max_j=$((i+4))  # 3 combinations
     fi

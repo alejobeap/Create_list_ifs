@@ -38,8 +38,9 @@ else
   coh=$ifgdir/$ifgid.geo.cc.tif
 fi
 outunw=$ifgdir/$ifgid.geo.unw.tif
+outunwpng="$ifgdir/$ifgid.geo.unw.png"
 
-if [ -f $outunw ]; then
+if [[ -f "$outunw" && -f "$outunwpng" ]]; then
  echo "the unw file already exists, cancelling"
  exit
 fi

@@ -45,12 +45,18 @@ if [[ -n "$1" && "$1" =~ ^[0-9]+$ ]]; then
     threshold="$1"
 else
     # Calcular threshold dinámicamente
-    if (( total_years <= 9 )); then
-        threshold=$(( total_years * 90 / 100 ))
-    else
-        threshold=$(( total_years * 70 / 100 ))
-    fi
+    #if (( total_years <= 9 )); then
+    #    threshold=$(( total_years * 90 / 100 ))
+    #else
+    #    threshold=$(( total_years * 70 / 100 ))
+    #fi
 
+    if (( total_years >= 10 )); then
+        threshold=$(( total_years - 1 ))
+    else
+        threshold=$(( total_years - 3 ))
+    fi
+    
     # Asegurar que el umbral sea al menos 1
     if [ "$threshold" -lt 1 ]; then
         threshold=1

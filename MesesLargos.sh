@@ -85,7 +85,10 @@ mapfile -t valid_months < "$months_file"
 months_regex=$(IFS='|'; echo "${valid_months[*]}")
 
 # Filtrar fechas cuyo mes esté en los meses válidos
-grep -E "^....(${months_regex})" "$dates_longs_file" > "$dates_longs_filter_file"
+#grep -E "^....(${months_regex})" "$dates_longs_file" > "$dates_longs_filter_file"
+
+# Filtrar dates_longs_file dejando solo líneas en formato YYYYMMDD cuyo mes esté en la lista
+grep -E "^[0-9]{4}(${months_regex})[0-9]{2}$" "$dates_longs_file" > "$dates_longs_filter_file"
 
 # Añadir las últimas 10 entradas del directorio RSLC al dates_longs_filter_file, sin duplicados
 ls RSLC -1 | tail -n 6 >> "$dates_longs_filter_file"

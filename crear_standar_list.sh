@@ -20,7 +20,7 @@ month_diff() {
 # Only applies the check if Chilescase == 1
 is_excluded_month() {
     local date="$1"
-    local month=$((10#${date:4:2}))  # Extract the month from date
+    local month=$((10#${date:4:2}))  # Extract the month from date (decimal seguro)
 
     # Default Chilescase to 0 if not 1 or 0
     if [[ "$Chilescase" != 1 && "$Chilescase" != 0 ]]; then
@@ -55,9 +55,9 @@ fi
 # Read all lines into an array
 mapfile -t lines < "$INPUT_FILE"
 
-#Obtener año y mes actuales
+# Obtener año y mes actuales (mes como decimal)
 current_year=$(date +%Y)
-current_month=$(date +%m)
+current_month=$((10#$(date +%m)))
 
 # Calcular mes inicial (hace 2 meses desde ahora)
 start_month=$((current_month - 2))
@@ -71,7 +71,6 @@ fi
 start_ym=$((start_year * 100 + start_month))
 end_ym=$((current_year * 100 + current_month))
 
-
 # Loop over lines and create valid combinations
 for ((i=0; i<${#lines[@]}; i++)); do
     date1="${lines[i]}"
@@ -81,8 +80,6 @@ for ((i=0; i<${#lines[@]}; i++)); do
     # Determine the number of combinations based on year
     if (( year1 >= 2014 && year1 <= 2017 )); then
         max_j=$((i+5))  # 4 combinations
-    #elif (( ym1 >= 202505 && year1 <= 2026 )); then
-    #    max_j=$((i+5))  # 4 combinations (desde mayo 2025 hasta 2026)
     elif (( ym1 >= start_ym && ym1 <= end_ym )); then
         max_j=$((i+5))  # 4 combinaciones dentro de los últimos 3 meses
     else

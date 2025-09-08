@@ -1,4 +1,5 @@
 nombre_volcan lon lat distancia
+Planchon -70.568 -35.223 20
 Putana -67.853 -22.557 20
 Casiri -69.7886 -17.4852 20
 Chillan -71.378 -36.868 20

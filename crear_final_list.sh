@@ -101,6 +101,17 @@ fi
 echo "Delete empty folders in GEOC"
 ./deletefolder_GEOC.sh
 
+
+### Check if the all list have loops 
+python Check_loops.py
+
+
+cat minimal_loops.txt >> $output
+
+# Sort the file in-place (overwrite)
+sort -o "$output" "$output"
+
+
 line_count=$(wc -l < "$output")
 echo "Número total de combinaciones generadas: $line_count"
 

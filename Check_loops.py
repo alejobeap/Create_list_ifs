@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+# Check if there are IFS witouth loops and create a list possible candidates (Based in LiCSBAS12...py)
 
 import glob
 import numpy as np

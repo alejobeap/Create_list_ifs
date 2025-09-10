@@ -101,7 +101,7 @@ fi
 echo "Delete empty folders in GEOC"
 ./deletefolder_GEOC.sh
 
-
+echo "Check no loopd interferograms and fill with some ones"
 ### Check if the all list have loops 
 python Check_loops.py
 

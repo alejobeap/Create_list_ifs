@@ -78,7 +78,7 @@ for ((i=0; i<${#lines[@]}; i++)); do
     ym1=${date1:0:6}   # Año + mes (YYYYMM)
 
     # Determine the number of combinations based on year
-    if (( year1 >= 2014 && year1 <= 2017 )); then
+    if (( year1 >= 2014 && year1 <= 2016 )); then
         max_j=$((i+5))  # 4 combinations
     elif (( ym1 >= start_ym && ym1 <= end_ym )); then
         max_j=$((i+5))  # 4 combinaciones dentro de los últimos 3 meses

@@ -1,4 +1,5 @@
 nombre_volcan lon lat distancia
+"Cordon de Puntas Negras" -67.534 -23.743 20
 Aira  130.6589 31.5772 20
 Ollague -68.18 -21.3 20
 "Purico Complex" -67.75 -23 0

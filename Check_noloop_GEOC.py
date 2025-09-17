@@ -90,13 +90,21 @@ def minimal_loops_for_no_loop_ifgs(ifgdates, no_loop_ifg):
             cand13 = f1 + "_" + f3
             existing = set(ifgdates)
 
-            existing_count = sum([cand in existing for cand in (cand12, cand23, cand13)])
-            if existing_count >= 2:
-                results[ifgd] = [cand12, cand23, cand13]
-                loop_found = True
-                break
+            # Guardamos todos, aunque falten
+            ternas = []
+            for cand in (cand12, cand23, cand13):
+                if cand in existing:
+                    ternas.append(cand)
+                else:
+                    ternas.append(cand + " [MISSING]")
+
+            results[ifgd] = ternas
+            loop_found = True
+            break
+
         if not loop_found:
             results[ifgd] = []
+
     return results
 
 

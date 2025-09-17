@@ -1,4 +1,7 @@
 nombre_volcan lon lat distancia
+Aira  130.6589 31.5772 20
+Ollangue -68.18 -21.3 20
+"Purico Complex" -67.75 -23 0
 Planchon -70.568 -35.223 20
 Putana -67.853 -22.557 20
 Casiri -69.7886 -17.4852 20

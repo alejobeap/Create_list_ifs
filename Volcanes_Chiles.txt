@@ -218,7 +218,6 @@ Sotara -76.592 2.108 20
 "Incahuasi, Nevado de" -68.296 -27.033 20
 Lanin -71.502 -39.637 20
 Maipo -69.832 -34.164 20
-San Jose -69.895 -33.789 20
 "Antillanca Volcanic Complex "-72.15 -40.783 20
 Antuco -71.349 -37.406 20
 "Blancas, Lomas" -71.009 -36.286 20

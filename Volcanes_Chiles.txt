@@ -1,4 +1,8 @@
 nombre_volcan lon lat distancia
+Llullaillaco -68.53 -24.72 20
+Pular -68.054 -24.188 20
+Negrillar -68.59 -24.319 20
+Chiliques -67.7 -23.58 20
 Caichinque -67.740 -23.949 20
 "Cordon de Puntas Negras" -67.534 -23.743 20
 Aira  130.6589 31.5772 20

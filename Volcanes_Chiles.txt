@@ -215,84 +215,84 @@ Calabozos -70.496 -35.558 20
 "Huila. Nevado del" -76.030 2.930 20
 Purace -76.400 2.320 20
 Sotara -76.592 2.108 20
-"Incahuasi, Nevado de"	-68.296	-27.033	20
-Lanin	-71.502	-39.637	20
-Maipo	-69.832	-34.164	20
-San Jose	-69.895	-33.789	20
-"Antillanca Volcanic Complex	"-72.15	-40.783	20
-Antuco	-71.349	-37.406	20
-"Blancas, Lomas"	-71.009	-36.286	20
-Caburgua-Huelemolle	-71.75	-39.25	20
-Calabozos	-70.496	-35.558	20
-Callaqui	-71.45	-37.92	20
-"Carran-Los Venados"	-72.07	-40.35	20
-"Descabezado Grande"	-70.75	-35.58	20
-Infiernillo	-69.9	-35.123	20
-"Longavi, Nevado de"	-71.164	-36.196	20
-Lonquimay	-71.586	-38.379	20
-"Mariñaqui, Laguna"	-71.167	-38.255	20
-Mocho-Choshuenco	-72.027	-39.927	20
-Palomo	-70.295	-34.608	20
-"Pantojo, Cerro"	-71.95	-40.77	20
-"Puntiagudo-Cordon Cenizos"	-72.264	-40.969	20
-Quetrupillan	-71.722	-39.496	20
-"Resago"	-70.903	-36.461	20
-"San Pedro-Pellado"	-70.849	-35.989	20
-Sollipulli	-71.52	-38.97	20
-Tinguiririca	-70.352	-34.814	20
-Tolhuaca	-71.645	-38.31	20
-Tralihue	-70.898	-38.509	20
-Tupungatito	-69.797	-33.425	20
-"Rapa Nui"	-109.356	-27.114	20
-"Robinson Crusoe"	-78.85	-33.658	20
-"San Felix"	-80.12	-26.27	20
-"Bayo Gorbea, Cerro"	-68.588	-25.414	20
-"Corrida de Cori Volcanic Field"	-68.367	-25.083	20
-"Ojos del Salado, Nevados"	-68.541	-27.109	20
-Guayaques	-67.566	-22.895	20
-Irruputuncu	-68.55	-20.73	20
-Olca-Paruma	-68.413	-20.939	20
-Sairecabur	-67.891	-22.719	20
-Acamarachi	-67.618	-23.292	20
-Colachi	-67.645	-23.236	20
-Copiapo	-69.13	-27.3	20
-"Cordon de Puntas Negras"	-67.534	-23.743	20
-Guallatiri	-69.092	-18.42	20
-Isluga	-68.83	-19.15	20
-Lastarria	-68.507	-25.168	20
-Licancabur	-67.88	-22.83	20
-Miniques	-67.77	-23.82	20
-"Overo, Cerro"	-67.67	-23.52	20
-"San Pedro-San Pablo"	-68.391	-21.888	20
-Taapaca	-69.5	-18.1	20
-Tacora	-69.773	-17.721	20
-"Tata Sabaya"	-68.53	-19.13	20
-Tilocalar	-68.13	-23.97	20
-"Tujle, Cerro"	-67.95	-23.83	20
-Aguilera	-73.75	-50.33	20
-Arenales	-73.483	-47.2	20
-"Burney, Monte"	-73.4	-52.33	20
-Cay	-72.984	-45.059	20
-"Cayute-La Vigueria"	-72.27	-41.25	20
-Cayutue-La Vigueria	-72.27	-41.3	20
-Chaiten	-72.651	-42.835	20
-Corcovado	-72.794	-43.189	20
-Fueguino	-70.262	-54.97	20
-Hornopiren	-72.431	-41.874	20
-Huequi	-72.578	-42.377	20
-Lautaro	-73.504	-49.019	20
-Maca	-73.17	-45.1	20
-Melimoyu	-72.88	-44.08	20
-Mentolat	-73.08	-44.7	20
-Meullin	-73.05	-45.22	20
-Michinmahuida	-72.445	-42.799	20
-Osorno	-72.496	-41.105	20
-"Palena Volcanic Group"	-72.83	-43.42	20
-"Pali-Aike Volcanic Field"	-69.698	-52.082	20
-Puyuhuapi	-72.53	-44.3	20
-Reclus	-73.58	-50.964	20
-"Río Murta"	-72.667	-46.167	20
-Tronador	-71.885	-41.157	20
-Yanteles	-72.782	-43.469	20
-Yate	-72.396	-41.755	20
-"Crater Basalt Volcanic Field"	-70.194	-42.018	20
+"Incahuasi, Nevado de" -68.296 -27.033 20
+Lanin -71.502 -39.637 20
+Maipo -69.832 -34.164 20
+San Jose -69.895 -33.789 20
+"Antillanca Volcanic Complex "-72.15 -40.783 20
+Antuco -71.349 -37.406 20
+"Blancas, Lomas" -71.009 -36.286 20
+Caburgua-Huelemolle -71.75 -39.25 20
+Calabozos -70.496 -35.558 20
+Callaqui -71.45 -37.92 20
+"Carran-Los Venados" -72.07 -40.35 20
+"Descabezado Grande" -70.75 -35.58 20
+Infiernillo -69.9 -35.123 20
+"Longavi, Nevado de" -71.164 -36.196 20
+Lonquimay -71.586 -38.379 20
+"Mariñaqui, Laguna" -71.167 -38.255 20
+Mocho-Choshuenco -72.027 -39.927 20
+Palomo -70.295 -34.608 20
+"Pantojo, Cerro" -71.95 -40.77 20
+"Puntiagudo-Cordon Cenizos" -72.264 -40.969 20
+Quetrupillan -71.722 -39.496 20
+"Resago" -70.903 -36.461 20
+"San Pedro-Pellado" -70.849 -35.989 20
+Sollipulli -71.52 -38.97 20
+Tinguiririca -70.352 -34.814 20
+Tolhuaca -71.645 -38.31 20
+Tralihue -70.898 -38.509 20
+Tupungatito -69.797 -33.425 20
+"Rapa Nui" -109.356 -27.114 20
+"Robinson Crusoe" -78.85 -33.658 20
+"San Felix" -80.12 -26.27 20
+"Bayo Gorbea, Cerro" -68.588 -25.414 20
+"Corrida de Cori Volcanic Field" -68.367 -25.083 20
+"Ojos del Salado, Nevados" -68.541 -27.109 20
+Guayaques -67.566 -22.895 20
+Irruputuncu -68.55 -20.73 20
+Olca-Paruma -68.413 -20.939 20
+Sairecabur -67.891 -22.719 20
+Acamarachi -67.618 -23.292 20
+Colachi -67.645 -23.236 20
+Copiapo -69.13 -27.3 20
+"Cordon de Puntas Negras" -67.534 -23.743 20
+Guallatiri -69.092 -18.42 20
+Isluga -68.83 -19.15 20
+Lastarria -68.507 -25.168 20
+Licancabur -67.88 -22.83 20
+Miniques -67.77 -23.82 20
+"Overo, Cerro" -67.67 -23.52 20
+"San Pedro-San Pablo" -68.391 -21.888 20
+Taapaca -69.5 -18.1 20
+Tacora -69.773 -17.721 20
+"Tata Sabaya" -68.53 -19.13 20
+Tilocalar -68.13 -23.97 20
+"Tujle, Cerro" -67.95 -23.83 20
+Aguilera -73.75 -50.33 20
+Arenales -73.483 -47.2 20
+"Burney, Monte" -73.4 -52.33 20
+Cay -72.984 -45.059 20
+"Cayute-La Vigueria" -72.27 -41.25 20
+Cayutue-La Vigueria -72.27 -41.3 20
+Chaiten -72.651 -42.835 20
+Corcovado -72.794 -43.189 20
+Fueguino -70.262 -54.97 20
+Hornopiren -72.431 -41.874 20
+Huequi -72.578 -42.377 20
+Lautaro -73.504 -49.019 20
+Maca -73.17 -45.1 20
+Melimoyu -72.88 -44.08 20
+Mentolat -73.08 -44.7 20
+Meullin -73.05 -45.22 20
+Michinmahuida -72.445 -42.799 20
+Osorno -72.496 -41.105 20
+"Palena Volcanic Group" -72.83 -43.42 20
+"Pali-Aike Volcanic Field" -69.698 -52.082 20
+Puyuhuapi -72.53 -44.3 20
+Reclus -73.58 -50.964 20
+"Río Murta" -72.667 -46.167 20
+Tronador -71.885 -41.157 20
+Yanteles -72.782 -43.469 20
+Yate -72.396 -41.755 20
+"Crater Basalt Volcanic Field" -70.194 -42.018 20

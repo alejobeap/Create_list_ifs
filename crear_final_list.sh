@@ -11,11 +11,11 @@ elif [ -s NameVolcano.txt ]; then
     # Caso 2: No hay $1, pero existe NameVolcano.txt
     name=$(cat NameVolcano.txt)
     
-    if [ -s Subsetnumber.txt ]; then
-        # Si también hay Subsetnumber.txt
-        subsetnumero=$(cat Subsetnumber.txt)
+    if [ -s SubsetID.txt ]; then
+        # Si también hay SubsetID.txt
+        subsetnumero=$(cat SubsetID.txt)
     else
-        # Si no hay Subsetnumber.txt → calcular con Python
+        # Si no hay SubsetID.txt → calcular con Python
         subsetnumero=$(python3 VER_Nombre_volcan_V2.py "$name" | tr -d '[]')
     fi
 else

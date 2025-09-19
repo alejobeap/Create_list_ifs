@@ -35,11 +35,23 @@ python matriz_coherencia.py
 ./crear_final_list.sh
 
 sleep 2000  # Esperar 2 horas
+./Buscar_folders_sin_unw_png.sh
+./unwrap_run.sh
+
+sleep 4000  # Esperar 2 horas
 ./deletefolder_GEOC.sh
 ./Buscar_folders_sin_unw_png.sh
 python Buscar_empty_tifs_2_delete.py
 ./Buscar_folders_sin_unw_png.sh
+./Conexiones_Aisladas.sh
+./Buscar_folders_sin_unw_png.sh
+
+sleep 1000  # Esperar 2 horas
 ./unwrap_run.sh
+python Buscar_empty_tifs_2_delete.py
+
+sleep 1000  # Esperar 2 horas
+./jasmin_run_cmd.sh
 
 EOF
 

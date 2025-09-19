@@ -1,7 +1,8 @@
-print("Conexione saisladas")
+print("Conexiones no aisladas")
 import os
 import pandas as pd
 import networkx as nx
+
 # Carpeta GEOC
 directorio = "GEOC"
 carpetas = [f for f in os.listdir(directorio) 
@@ -26,13 +27,32 @@ for i in range(len(df)-1):
 
 # Generar nuevas conexiones para unir islas
 conexiones_nuevas = []
+fechas = sorted(set(df['start']).union(set(df['end'])))
+
 for gap_start, gap_end in islas:
-    # Crear 3 conexiones cercanas a los extremos de cada isla
-    conexiones_nuevas.append((gap_start, gap_end))
-    conexiones_nuevas.append((gap_start - pd.Timedelta(days=1), gap_end))
-    conexiones_nuevas.append((gap_start, gap_end + pd.Timedelta(days=1)))
-    for conn in conexiones_nuevas[-3:]:
-        G.add_edge(*conn)
+    # Fechas disponibles posteriores al gap_start
+    posteriores = [f for f in fechas if f > gap_start]
+    # Fechas disponibles anteriores al gap_end
+    anteriores = [f for f in fechas if f < gap_end]
+
+    if posteriores and anteriores:
+        # 4 más cercanas (2 adelante, 2 atrás)
+        cercanas_post = posteriores[:2]   # las 2 más próximas después del inicio
+        cercanas_ant = anteriores[-2:]    # las 2 más próximas antes del final
+
+        # 2 lejanas (la primera y la última fecha del dataset)
+        lejana_post = [posteriores[-1]]   # la más lejana hacia adelante
+        lejana_ant = [anteriores[0]]      # la más lejana hacia atrás
+
+        # Conexiones desde el inicio de la isla hacia adelante
+        for f in cercanas_post + lejana_post:
+            conexiones_nuevas.append((gap_start, f))
+            G.add_edge(gap_start, f)
+
+        # Conexiones desde el final de la isla hacia atrás
+        for f in cercanas_ant + lejana_ant:
+            conexiones_nuevas.append((f, gap_end))
+            G.add_edge(f, gap_end)
 
 # Guardar en archivo
 with open('interferogramasnoaislados.txt', 'w') as f:
@@ -42,4 +62,3 @@ with open('interferogramasnoaislados.txt', 'w') as f:
         f.write(f"{start_str}_{end_str}\n")
 
 print("Archivo 'interferogramasnoaislados.txt' generado con las conexiones no aisladas.")
-

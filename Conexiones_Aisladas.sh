@@ -1,5 +1,7 @@
 #!/bin/bash
 
+parent_dir=$(basename "$(dirname "$(pwd)")")
+current_dir=$(basename "$(pwd)")
 
 echo "conexiones aisladas"
 python conexiones_aisladas.py

@@ -8,3 +8,12 @@ line_count=$(wc -l < interferogramasnoaislados.txt)
 echo "📄 Número total de combinaciones generadas: $line_count"
 
 framebatch_gapfill.sh -l -N -I ${PWD}/interferogramasnoaislados.txt 5 200 7 2
+
+
+
+
+cat minimal_loops.txt >> $output
+
+# Sort the file in-place (overwrite)
+sort -o "$output" "$output"
+

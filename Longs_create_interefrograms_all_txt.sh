@@ -318,13 +318,46 @@ generate_extra_month_combinations "${dates_last_two_years[@]}"
 line_count=$(wc -l < "$OUTPUT_FILE")
 echo "Número total de combinaciones generadas: $line_count"
 
-# Si el número de combinaciones es mayor que 300, volver a ejecutar con threshold 10
+# Si el número de combinaciones es mayor que 500, volver a ejecutar con threshold 10
+#if (( line_count > 500 )); then
+#    echo " Más de 400 combinaciones, reejecutando con threshold=10..."
+#    ./MesesLargos.sh 10
+#    ./Longs_create_interefrograms_all_txt.sh
+#elif (( line_count < 100 )); then
+#    echo " Menos de 100 combinaciones, reejecutando con threshold=9..."
+#    ./MesesLargos.sh 9
+#    ./Longs_create_interefrograms_all_txt.sh
+#fi
+
+# Si el número de combinaciones es mayor que 500, volver a ejecutar con threshold 10
 if (( line_count > 500 )); then
-    echo " Más de 400 combinaciones, reejecutando con threshold=10..."
-    ./MesesLargos.sh 9
-    ./Longs_create_interefrograms_all_txt.sh
-elif (( line_count < 100 )); then
-    echo " Menos de 100 combinaciones, reejecutando con threshold=9..."
+    echo "Más de 500 combinaciones, reejecutando con threshold=10..."
     ./MesesLargos.sh 10
     ./Longs_create_interefrograms_all_txt.sh
+
+    # Recontamos para ver si con 10 sigue siendo demasiado
+    line_count=$(wc -l < "$OUTPUT_FILE")
+    echo "Número total de combinaciones generadas tras threshold=10: $line_count"
+
+    if (( line_count > 500 )); then
+        echo "Aún más de 500 combinaciones, probando con threshold=11..."
+        ./MesesLargos.sh 11
+        ./Longs_create_interefrograms_all_txt.sh
+    fi
+
+elif (( line_count < 100 )); then
+    echo "Menos de 100 combinaciones, reejecutando con threshold=9..."
+    ./MesesLargos.sh 9
+    ./Longs_create_interefrograms_all_txt.sh
+
+    # Recontamos para ver si con 9 sigue siendo muy poco
+    line_count=$(wc -l < "$OUTPUT_FILE")
+    echo "Número total de combinaciones generadas tras threshold=9: $line_count"
+
+    if (( line_count < 100 )); then
+        echo "Aún menos de 100 combinaciones, probando con threshold=11..."
+        ./MesesLargos.sh 11
+        ./Longs_create_interefrograms_all_txt.sh
+    fi
 fi
+

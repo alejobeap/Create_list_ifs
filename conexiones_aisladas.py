@@ -36,23 +36,26 @@ for gap_start, gap_end in islas:
     anteriores = [f for f in fechas if f < gap_end]
 
     if posteriores and anteriores:
-        # 4 más cercanas (2 adelante, 2 atrás)
-        cercanas_post = posteriores[:2]   # las 2 más próximas después del inicio
-        cercanas_ant = anteriores[-2:]    # las 2 más próximas antes del final
+        cercanas_post = posteriores[:2]   # 2 más próximas después
+        cercanas_ant = anteriores[-2:]    # 2 más próximas antes
 
-        # 2 lejanas (la primera y la última fecha del dataset)
         lejana_post = [posteriores[-1]]   # la más lejana hacia adelante
         lejana_ant = [anteriores[0]]      # la más lejana hacia atrás
 
-        # Conexiones desde el inicio de la isla hacia adelante
-        for f in cercanas_post + lejana_post:
-            conexiones_nuevas.append((gap_start, f))
-            G.add_edge(gap_start, f)
+        # Fecha real más cercana ANTERIOR al gap_start
+        fecha_inicio_real = max([f for f in fechas if f <= gap_start], default=None)
+        # Fecha real más cercana POSTERIOR al gap_end
+        fecha_fin_real = min([f for f in fechas if f >= gap_end], default=None)
 
-        # Conexiones desde el final de la isla hacia atrás
-        for f in cercanas_ant + lejana_ant:
-            conexiones_nuevas.append((f, gap_end))
-            G.add_edge(f, gap_end)
+        if fecha_inicio_real:
+            for f in cercanas_post + lejana_post:
+                conexiones_nuevas.append((fecha_inicio_real, f))
+                G.add_edge(fecha_inicio_real, f)
+
+        if fecha_fin_real:
+            for f in cercanas_ant + lejana_ant:
+                conexiones_nuevas.append((f, fecha_fin_real))
+                G.add_edge(f, fecha_fin_real)
 
 # Guardar en archivo
 with open('interferogramasnoaislados.txt', 'w') as f:

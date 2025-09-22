@@ -29,18 +29,18 @@ for i in range(len(df)-1):
 conexiones_nuevas = []
 fechas = sorted(set(df['start']).union(set(df['end'])))
 
+max_gap = pd.Timedelta(days=377)  # 1 año ± 12 días
+
 for gap_start, gap_end in islas:
-    # Fechas disponibles posteriores al gap_start
-    posteriores = [f for f in fechas if f > gap_start]
-    # Fechas disponibles anteriores al gap_end
-    anteriores = [f for f in fechas if f < gap_end]
+    # Fechas reales posteriores al gap_start dentro del rango permitido
+    posteriores = [f for f in fechas if f > gap_start and (f - gap_start) <= max_gap]
+    # Fechas reales anteriores al gap_end dentro del rango permitido
+    anteriores = [f for f in fechas if f < gap_end and (gap_end - f) <= max_gap]
 
     if posteriores and anteriores:
-        cercanas_post = posteriores[:2]   # 2 más próximas después
-        cercanas_ant = anteriores[-2:]    # 2 más próximas antes
-
-        lejana_post = [posteriores[-1]]   # la más lejana hacia adelante
-        lejana_ant = [anteriores[0]]      # la más lejana hacia atrás
+        # limitar a las más cercanas
+        cercanas_post = posteriores[:2]   # hasta 2 fechas adelante
+        cercanas_ant = anteriores[-2:]    # hasta 2 fechas atrás
 
         # Fecha real más cercana ANTERIOR al gap_start
         fecha_inicio_real = max([f for f in fechas if f <= gap_start], default=None)
@@ -48,12 +48,12 @@ for gap_start, gap_end in islas:
         fecha_fin_real = min([f for f in fechas if f >= gap_end], default=None)
 
         if fecha_inicio_real:
-            for f in cercanas_post + lejana_post:
+            for f in cercanas_post:
                 conexiones_nuevas.append((fecha_inicio_real, f))
                 G.add_edge(fecha_inicio_real, f)
 
         if fecha_fin_real:
-            for f in cercanas_ant + lejana_ant:
+            for f in cercanas_ant:
                 conexiones_nuevas.append((f, fecha_fin_real))
                 G.add_edge(f, fecha_fin_real)
 
@@ -64,4 +64,4 @@ with open('interferogramasnoaislados.txt', 'w') as f:
         end_str = conn[1].strftime('%Y%m%d')
         f.write(f"{start_str}_{end_str}\n")
 
-print("Archivo 'interferogramasnoaislados.txt' generado con las conexiones no aisladas.")
+print("Archivo 'interferogramasnoaislados.txt' generado con las conexiones no aisladas (máx 1 año ±12 días).")

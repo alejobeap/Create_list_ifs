@@ -147,7 +147,7 @@ if __name__ == "__main__":
     with open("missing_ifgs_GEOC.txt", "w") as f:
         f.write("\n".join(missing_ifgs))
 
-    # Loops mÃ­nimos respetando orden temporal y lÃ­mite de 13 meses
+    # Loops mi­nimos respetando orden temporal y lÃ­mite de 13 meses
     minimal_loops = minimal_loops_for_no_loop_ifgs(ifgdates, no_loop_ifg, max_months=13)
     with open("minimal_loops_GEOC.txt", "w") as f:
        for loops in minimal_loops.values():

@@ -96,7 +96,7 @@ def minimal_loops_for_no_loop_ifgs(ifgdates, no_loop_ifg):
                 if cand in existing:
                     ternas.append(cand)
                 else:
-                    ternas.append(cand + " [MISSING]")
+                    ternas.append(cand)
 
             results[ifgd] = ternas
             loop_found = True

@@ -109,15 +109,15 @@ if __name__ == "__main__":
         ixs_ifg_no_loop = np.where(ns_loop4ifg == 0)[0]
         no_loop_ifg = [ifgdates[ix] for ix in ixs_ifg_no_loop]
 
-    with open("no_loop_ifg.txt", "w") as f:
+    with open("no_loop_ifg_GEOC.txt", "w") as f:
         f.write("\n".join(no_loop_ifg))
 
     missing_ifgs = suggest_missing_ifgs(ifgdates)
-    with open("missing_ifgs.txt", "w") as f:
+    with open("missing_ifgs_GEOC.txt", "w") as f:
         f.write("\n".join(missing_ifgs))
 
     minimal_loops = minimal_loops_for_no_loop_ifgs(ifgdates, no_loop_ifg)
-    with open("minimal_loops.txt", "w") as f:
+    with open("minimal_loops_GEOC.txt", "w") as f:
         for loop in minimal_loops.values():
             if loop:
                 f.write("\n".join(loop) + "\n")

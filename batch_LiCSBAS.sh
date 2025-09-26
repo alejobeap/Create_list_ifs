@@ -173,7 +173,7 @@ p15_keep_isolated="n"	# y/n. default: n
 p15_noautoadjust="n" # y/n. default: n
 p16_TSdir=""    # default: TS_$GEOCmldir
 p16_nomask="n"	# y/n. default: n
-p16_n_para=$n_para   # default: # of usable CPU
+p16_n_para="1" #$n_para   # default: # of usable CPU
 p17_TSdir=""    # default: TS_$GEOCmldir but use the TS_$GEOCmldir_update to combine
 
 # eqoffs

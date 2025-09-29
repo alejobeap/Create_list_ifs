@@ -275,7 +275,6 @@ Arenales -73.483 -47.2 20
 "Burney, Monte" -73.4 -52.33 20
 Cay -72.984 -45.059 20
 "Cayute-La Vigueria" -72.27 -41.25 20
-Cayutue-La Vigueria -72.27 -41.3 20
 Chaiten -72.651 -42.835 20
 Corcovado -72.794 -43.189 20
 Fueguino -70.262 -54.97 20

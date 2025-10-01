@@ -1,9 +1,10 @@
+
 import numpy as np
 import matplotlib.pyplot as plt
 import os
 
 # File name
-file_name = 'Longs_output_averages_from_cc_tifs.txt'
+file_name = 'Longs_combination_average_cc.txt'
 
 # Initialize lists to store data
 data_values = []
@@ -34,15 +35,11 @@ print(f"Standard Deviation: {std_value:.4f}")
 # Plot histogram
 plt.figure(figsize=(8, 6))
 plt.hist(data_values, bins=15, color='blue', alpha=0.7, edgecolor='black')
-plt.axvline(mean_value, color='red', linestyle='dashed', linewidth=1.5, label=f'Mean: {mean_value:.4f}')
+
 plt.title('Histogram of longs IFS')
 plt.xlabel('Value')
 plt.ylabel('Frequency')
 plt.grid(axis='y', linestyle='--', alpha=0.7)
-
-# Add mean and standard deviation to the plot
-plt.text(0.05, 0.9, f"Mean: {mean_value:.4f}\nStd: {std_value:.4f}", transform=plt.gca().transAxes, 
-         fontsize=12, bbox=dict(facecolor='white', alpha=0.5, edgecolor='black'))
 
 # Save the figure
 current_directory = os.getcwd()
@@ -54,19 +51,8 @@ if len(path_parts) >= 2:
 else:
     location_name = "Unknown"
     batch_name = "Unknown"
-output_filename = f"Longs_Histogram_{location_name}_{batch_name}.png"
+output_filename = f"Long_histogram_{location_name}_{batch_name}.png"
 output_path = os.path.join(current_directory, output_filename)
-
-
-# Save the mean value to a text file
-mean_output_filename = f"Longs_mean_value_{location_name}_{batch_name}.txt"
-mean_output_path = os.path.join(current_directory, mean_output_filename)
-if os.path.exists(mean_output_path):
-    os.remove(mean_output_path)
-with open(mean_output_path, 'w') as mean_file:
-    mean_file.write(f"{mean_value:.4f}")
 
 plt.savefig(output_path, dpi=300)
 
-# Show the plot
-#plt.show()

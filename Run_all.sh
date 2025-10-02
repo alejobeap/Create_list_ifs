@@ -29,8 +29,7 @@ python Estimate_Coherence_Average_from_DEM.py
 python plot_histogram_average_coherence.py
 ./filtered_average.sh
 python matriz_coherencia.py
-./MesesLargos.sh 10
-./Longs_create_interefrograms_all_txt.sh
+./Largas_combinaciones_filtradas.sh
 ./crear_standar_list.sh
 ./crear_final_list.sh
 

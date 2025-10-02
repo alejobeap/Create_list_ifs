@@ -1,4 +1,5 @@
 nombre_volcan lon lat distancia
+Tenerife -16.641 28.271 20
 "El Chichon" -93.2297 17.3602 20
 Chichon -93.2297 17.3602 20
 Solo -68.713 -27.105 20

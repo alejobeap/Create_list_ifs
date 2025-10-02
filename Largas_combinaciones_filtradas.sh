@@ -34,7 +34,7 @@ last_year=$(tail -n 1 "$dates_longs_file" | cut -c1-4)
 total_years=$((last_year - first_year + 1))
 
 # --- Threshold inicial ---
-threshold=$(( total_years >= 10 ? total_years - 1 : total_years - 3 ))
+threshold=$total_years
 (( threshold < 1 )) && threshold=1
 
 echo "Rango de años: $first_year-$last_year ($total_years años)"
@@ -97,37 +97,106 @@ generate_combinations() {
     wc -l < "$output_file"
 }
 
-# --- Bucle de ajuste automático ---
+# --- Threshold interactivo ---
 min_threshold=1
 max_threshold=$total_years
 line_count=$(generate_combinations "$threshold")
-
-echo "Combinaciones iniciales: $line_count"
 
 while true; do
     if (( line_count > 500 )); then
         ((threshold++))
         (( threshold > max_threshold )) && break
-        echo "Demasiadas combinaciones ($line_count), subiendo threshold a $threshold..."
         line_count=$(generate_combinations "$threshold")
-
     elif (( line_count < 100 )); then
         ((threshold--))
         (( threshold < min_threshold )) && break
-        echo "Muy pocas combinaciones ($line_count), bajando threshold a $threshold..."
         line_count=$(generate_combinations "$threshold")
-
     else
-        echo " Número óptimo de combinaciones: $line_count (Threshold=$threshold)"
         break
     fi
-
-    # Caso especial: 0 combinaciones → sigue bajando hasta encontrar algo
     if (( line_count == 0 && threshold > min_threshold )); then
         ((threshold--))
-        echo " Cero combinaciones, probando con threshold=$threshold..."
         line_count=$(generate_combinations "$threshold")
     fi
 done
 
-echo "Archivo final: $output_file con $line_count combinaciones"
+# --- Función para verificar conexiones entre años existentes ---
+mapfile -t existing_combinations < <(sort -u "$output_file")
+exists_connection_between_years() {
+    local year1=$1
+    local year2=$2
+    for combo in "${existing_combinations[@]}"; do
+        local start_year=${combo:0:4}
+        local end_year=${combo:9:4}
+        if { [[ "$start_year" == "$year1" && "$end_year" == "$year2" ]] || [[ "$start_year" == "$year2" && "$end_year" == "$year1" ]]; }; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+force_real_gaps() {
+    mapfile -t years < <(cut -c1-4 "$dates_longs_filter_file" | sort -u)
+    local n=${#years[@]}
+    local N=3  # Número de fechas antes y después del gap
+
+    for ((i=0; i<n-1; i++)); do
+        local y1=${years[i]}
+        # Buscar el siguiente año con datos
+        for ((j=i+1; j<n; j++)); do
+            local y2=${years[j]}
+            local gap=$((y2 - y1))
+            if (( gap > 1 )); then
+                # Revisar si hay alguna conexión intermedia
+                local has_intermediate=false
+                for ((k=i; k<j; k++)); do
+                    if exists_connection_between_years "${years[k]}" "${years[k+1]}"; then
+                        has_intermediate=true
+                        break
+                    fi
+                done
+                if ! $has_intermediate; then
+                    echo "No existe conexión real entre $y1 y $y2 → forzando combinaciones entre últimas $N fechas de $y1 y primeras $N de $y2..."
+
+                    # Fechas del año anterior al gap
+                    local dates_y1=()
+                    for d in "${dates[@]}"; do
+                        [[ "${d:0:4}" == "$y1" ]] && dates_y1+=("$d")
+                    done
+                    # Tomar las últimas N fechas
+                    local last_y1=("${dates_y1[@]: -$N}")
+
+                    # Fechas del año posterior al gap
+                    local dates_y2=()
+                    for d in "${dates[@]}"; do
+                        [[ "${d:0:4}" == "$y2" ]] && dates_y2+=("$d")
+                    done
+                    # Tomar las primeras N fechas
+                    local first_y2=("${dates_y2[@]:0:$N}")
+
+                    # Generar todas las combinaciones cruzadas y escribir en el archivo
+                    for d1 in "${last_y1[@]}"; do
+                        for d2 in "${first_y2[@]}"; do
+                            echo "${d1}_${d2}" >> "$output_file"
+                        done
+                    done
+                fi
+                break  # Solo forzar la primera conexión del gap
+            fi
+        done
+    done
+}
+
+
+
+# --- Leer fechas filtradas globalmente ---
+mapfile -t dates < <(sort -u "$dates_longs_filter_file")
+
+# --- Llamar función de gaps reales ---
+force_real_gaps
+
+
+sort -o "$output_file" "$output_file"
+# --- Guardar total final ---
+line_count=$(wc -l < "$output_file")
+echo "Número total de combinaciones generadas: $line_count"

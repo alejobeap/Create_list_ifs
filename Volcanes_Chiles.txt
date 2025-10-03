@@ -5,7 +5,7 @@ Tenerife -16.641 28.271 20
 Chichon -93.2297 17.3602 20
 Solo -68.713 -27.105 20
 "Falso Azufre" -68.37 -26.8 20
-"Nevada Sierra" -68.58 -26.48 20
+"Nevada. Sierra" -68.58 -26.48 20
 Llullaillaco -68.53 -24.72 20
 Pular -68.054 -24.188 20
 Negrillar -68.59 -24.319 20

@@ -107,16 +107,19 @@ while true; do
         ((threshold++))
         (( threshold > max_threshold )) && break
         line_count=$(generate_combinations "$threshold")
+        echo "Threshols: $threshold -> combinations: $line_count"
     elif (( line_count < 100 )); then
         ((threshold--))
         (( threshold < min_threshold )) && break
         line_count=$(generate_combinations "$threshold")
+        echo "Threshols: $threshold -> combinations: $line_count"
     else
         break
     fi
     if (( line_count == 0 && threshold > min_threshold )); then
         ((threshold--))
         line_count=$(generate_combinations "$threshold")
+        echo "Threshols: $threshold -> combinations: $line_count"
     fi
 done
 

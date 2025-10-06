@@ -1,4 +1,7 @@
 nombre_volcan lon lat distancia
+"Tolima. Nevado del" -75.330 4.658 20
+"Ruiz. Nevado del" -75.324 4.892 20
+Machin -75.389 4.487 20
 Antofagasta -67.4 -26.12 20
 Tenerife -16.641 28.271 20
 "El Chichon" -93.2297 17.3602 20

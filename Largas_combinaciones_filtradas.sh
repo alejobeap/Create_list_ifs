@@ -31,10 +31,10 @@ done
 
 first_year=$(head -n 1 "$dates_longs_file" | cut -c1-4)
 last_year=$(tail -n 1 "$dates_longs_file" | cut -c1-4)
-total_years=$((last_year - first_year + 1))
+total_years=$((last_year - first_year + 0))
 
 # --- Threshold inicial ---
-threshold=$(( total_years - 1 ))
+threshold=$(( total_years - 2 ))
 (( threshold < 1 )) && threshold=1
 
 echo "Rango de años: $first_year-$last_year ($total_years años)"

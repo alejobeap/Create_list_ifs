@@ -1,4 +1,5 @@
 nombre_volcan lon lat distancia
+"Tenduruk Dagi" 43.874 39.356 20
 Dukono 127.8783 1.6992 20
 "Tolima. Nevado del" -75.330 4.658 20
 "Ruiz. Nevado del" -75.324 4.892 20

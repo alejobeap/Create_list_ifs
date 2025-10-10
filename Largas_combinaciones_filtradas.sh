@@ -103,7 +103,7 @@ max_threshold=$total_years
 line_count=$(generate_combinations "$threshold")
 
 while true; do
-    if (( line_count > 500 )); then
+    if (( line_count > 400 )); then
         ((threshold++))
         (( threshold > max_threshold )) && break
         line_count=$(generate_combinations "$threshold")

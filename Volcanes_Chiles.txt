@@ -1,4 +1,6 @@
 nombre_volcan lon lat distancia
+Kilimanjaro 37.35 -3.070 20
+Meru 36.75 -3.244 20
 "Chiles-Cerro Negro" -77.938 0.817 20
 "Tenduruk Dagi" 43.874 39.356 20
 Dukono 127.8783 1.6992 20

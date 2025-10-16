@@ -1,4 +1,5 @@
 nombre_volcan lon lat distancia
+Alcedo -91.12 -0.43 20
 Kilimanjaro 37.35 -3.070 20
 Meru 36.75 -3.244 20
 "Chiles-Cerro Negro" -77.938 0.817 20

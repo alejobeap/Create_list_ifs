@@ -34,8 +34,25 @@ last_year=$(tail -n 1 "$dates_longs_file" | cut -c1-4)
 total_years=$((last_year - first_year + 0))
 
 # --- Threshold inicial ---
-threshold=$(( total_years - 2 ))
+#threshold=$(( total_years - 2 ))
+#(( threshold < 1 )) && threshold=1
+
+
+# --- Threshold inicial ---
+if (( total_years >= 11 )); then
+    threshold=$(( total_years - 2 ))
+elif (( total_years < 9 )); then
+    threshold=$(( total_years - 3 ))
+else
+    # Optional: handle total_years between 9 and 10
+    threshold=$(( total_years - 2 ))
+fi
+
+# Ensure threshold is at least 1
 (( threshold < 1 )) && threshold=1
+
+echo "Threshold is $threshold"
+
 
 echo "Rango de años: $first_year-$last_year ($total_years años)"
 echo "Threshold inicial: $threshold"

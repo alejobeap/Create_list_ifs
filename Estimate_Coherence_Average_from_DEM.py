@@ -85,7 +85,7 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
             max_lat = lat + buffer_deg
 
 
-                        # Leer toda la banda 1 (elevaciI³n completa)
+                        # Leer toda la banda 1 (elevacion completa)
             elevacion = src.read(1)
 
             # Enmascarar valores nodata (convertirlos en np.nan)

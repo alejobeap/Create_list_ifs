@@ -1,4 +1,5 @@
 nombre_volcan lon lat distancia
+Merapi 10.446 -7.54 20
 Alcedo -91.12 -0.43 20
 Kilimanjaro 37.35 -3.070 20
 Meru 36.75 -3.244 20

@@ -39,6 +39,7 @@ log="$logdir/$(date +%Y%m%d%H%M)$(basename $0 .sh)_${start_step}_${end_step}.log
 freq="" # default: 5.405e9 Hz
 
 
+
 maxheigh=$(awk '{print $1}' *_heigh.txt | sort -nr | head -1)
 minheigh=$(awk '{print $2}' *_heigh.txt | sort -nr | head -1)
 clipinfo=$(awk '{print $3}' *_heigh.txt | sort -nr | head -1)
@@ -164,6 +165,7 @@ p13_gamma=""	# default: 0.0001
 p13_n_para=$n_para	# default: # of usable CPU
 p13_n_unw_r_thre=""	# default: 1 for shorter-than-L-band-wavelength (if cometdev, will set to 0.1)
 p13_keep_incfile="n"	# y/n. default: n
+p13_load_patches="y" # Load previously completed patches first [default: No, restart inversion]
 p14_TSdir=""    # default: TS_$GEOCmldir
 p14_mem_size="" # default: 4000 (MB)
 p15_TSdir=""    # default: TS_$GEOCmldir
@@ -520,6 +522,7 @@ if [ $start_step -le 13 -a $end_step -ge 13 ];then
   if [ "$p13_skippngs" == "y" ];then p13_op="$p13_op --nopngs"; fi
   if [ "$p13_badnoloops" == "y" ];then p13_op="$p13_op --badnoloops"; fi
   if [ "$p13_keep_incfile" == "y" ];then p13_op="$p13_op --keep_incfile"; fi
+  if [ "$p13_load_patches" == "y" ];then p13_op="$p13_op --load_patches"; fi
   if [ "$gpu" == "y" ];then p13_op="$p13_op --gpu"; fi
 
   if [ "$cometdev" -eq 1 ];then
@@ -661,4 +664,3 @@ if [ $check_only == "y" ];then
   echo "Above commands will run when you change check_only to \"n\""
   echo ""
 fi
-

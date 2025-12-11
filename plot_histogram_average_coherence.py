@@ -28,8 +28,8 @@ mean_value = np.nanmean(data_values)
 std_value = np.nanstd(data_values)
 
 # Print mean and standard deviation
-print(f"Mean: {mean_value:.4f}")
-print(f"Standard Deviation: {std_value:.4f}")
+print(f"Mean: {mean_value:.2f}")
+print(f"Standard Deviation: {std_value:.2f}")
 
 # Plot histogram
 plt.figure(figsize=(8, 6))
@@ -66,7 +66,7 @@ mean_output_path = os.path.join(current_directory, mean_output_filename)
 if os.path.exists(mean_output_path):
     os.remove(mean_output_path)
 with open(mean_output_path, 'w') as mean_file:
-    mean_file.write(f"{mean_value:.4f}")
+    mean_file.write(f"{mean_value:.2f}")
 
 plt.savefig(output_path, dpi=300)
 

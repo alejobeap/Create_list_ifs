@@ -66,7 +66,7 @@ mean_output_path = os.path.join(current_directory, mean_output_filename)
 if os.path.exists(mean_output_path):
     os.remove(mean_output_path)
 with open(mean_output_path, 'w') as mean_file:
-    mean_file.write(f"{mean_value:.2f}")
+    mean_file.write(f"{mean_value:.3f}")
 
 plt.savefig(output_path, dpi=300)
 

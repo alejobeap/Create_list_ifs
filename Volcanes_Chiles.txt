@@ -1,5 +1,5 @@
 nombre_volcan lon lat distancia
-Taal 120.9975 14.0106 20
+Taal 120.9914 14.00795 20
 Uturuncu -67.18 -22.27 20
 Merapi 10.446 -7.54 20
 Alcedo -91.12 -0.43 20

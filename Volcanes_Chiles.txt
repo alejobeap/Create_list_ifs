@@ -1,4 +1,6 @@
 nombre_volcan lon lat distancia
+Misti -71.4056 -16.2991 20 
+Ubinas -70.8972 -16.345 20 
 Taal 120.9914 14.00795 20
 Uturuncu -67.18 -22.27 20
 Merapi 10.446 -7.54 20

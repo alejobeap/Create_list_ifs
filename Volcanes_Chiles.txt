@@ -1,4 +1,5 @@
 nombre_volcan lon lat distancia
+Nabro 41.7 13.37 20
 Misti -71.4056 -16.2991 20 
 Ubinas -70.8972 -16.345 20 
 Taal 120.9914 14.00795 20

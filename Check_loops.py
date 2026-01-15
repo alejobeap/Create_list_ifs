@@ -105,10 +105,10 @@ def minimal_loops_for_no_loop_ifgs(ifgdates, no_loop_ifg):
 
 if __name__ == "__main__":
 
-    # 🔹 Leer interferogramas
+    #  Leer interferogramas
     ifgdates = get_ifgdates_from_files("IFSforLiCSBAS_*.txt")
 
-    # 🔹 Construir loop matrix
+    #  Construir loop matrix
     Aloop = make_loop_matrix(ifgdates)
     if Aloop.size == 0:
         no_loop_ifg = ifgdates
@@ -117,16 +117,16 @@ if __name__ == "__main__":
         ixs_ifg_no_loop = np.where(ns_loop4ifg == 0)[0]
         no_loop_ifg = [ifgdates[ix] for ix in ixs_ifg_no_loop]
 
-    # 🔹 Guardar interferogramas sin loops
+    #  Guardar interferogramas sin loops
     with open("no_loop_ifg.txt", "w") as f:
         f.write("\n".join(no_loop_ifg))
 
-    # 🔹 Sugerir interferogramas faltantes
+    #  Sugerir interferogramas faltantes
     missing_ifgs = suggest_missing_ifgs(ifgdates)
     with open("missing_ifgs.txt", "w") as f:
         f.write("\n".join(missing_ifgs))
 
-    # 🔹 Loops mínimos (solo las ternas, sin texto adicional)
+    #  Loops mínimos (solo las ternas, sin texto adicional)
     minimal_loops = minimal_loops_for_no_loop_ifgs(ifgdates, no_loop_ifg)
     with open("minimal_loops.txt", "w") as f:
         for loop in minimal_loops.values():

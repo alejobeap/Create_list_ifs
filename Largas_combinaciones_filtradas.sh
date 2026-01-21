@@ -45,7 +45,7 @@ elif (( total_years < 9 )); then
     threshold=$(( total_years - 3 ))
 else
     # Optional: handle total_years between 9 and 10
-    threshold=$(( total_years - 2 ))
+    threshold=$(( total_years - 1 ))
 fi
 
 # Ensure threshold is at least 1
@@ -67,7 +67,7 @@ month_diff() {
 
 is_valid_diff() {
     case "$1" in
-        6|9|12|15) return 0 ;;
+        6|9|12) return 0 ;;
         *) return 1 ;;
     esac
 }

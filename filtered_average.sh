@@ -15,7 +15,9 @@ if [ ! -f "$mean_file" ]; then
 fi
 
 # Read the mean value from the text file
-mean_value=$(cat "$mean_file" | awk '{print $1}') # Assumes the format is "Mean: value"
+#mean_value=$(cat "$mean_file" | awk '{print $1}') # Assumes the format is "Mean: value"
+mean_value=$(awk '{printf "%.2f", int($1*100)/100}' "$mean_file")  # only take 2 decimals the 0.25 from 0.258 
+
 
 # Clear output file if it exists
 > "$output_file"

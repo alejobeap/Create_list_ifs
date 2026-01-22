@@ -19,6 +19,7 @@ if not os.path.isfile(mean_file):
 try:
     with open(mean_file, 'r') as file:
         mean_value = float(file.readline().split()[0])  # Assumes the format is "Mean: value"
+        mean_value = int(mean_value * 100) / 100 ## take only two decimals is correct?
     print(f"Mean value read from file: {mean_value}")
 except Exception as e:
     print(f"Error reading mean value from file: {e}")

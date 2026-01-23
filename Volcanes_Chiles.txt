@@ -1,4 +1,5 @@
 nombre_volcan lon lat distancia
+Ebulobo 121.191 -8.817 20
 "Mauna Loa" -155.608 19.475 20
 Karangetang 125.407 2.781 20
 Ruang 125.3671 2.3058 20

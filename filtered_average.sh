@@ -18,6 +18,10 @@ fi
 #mean_value=$(cat "$mean_file" | awk '{print $1}') # Assumes the format is "Mean: value"
 mean_value=$(awk '{printf "%.2f", int($1*100)/100}' "$mean_file")  # only take 2 decimals the 0.25 from 0.258 
 
+if (( $(echo "$mean_value > 0.7" | bc -l) )); then   ### CAse like Mauna Loa with good coherence
+    mean_value=0.8
+fi
+
 
 # Clear output file if it exists
 > "$output_file"

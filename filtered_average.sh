@@ -16,11 +16,14 @@ fi
 
 # Read the mean value from the text file
 #mean_value=$(cat "$mean_file" | awk '{print $1}') # Assumes the format is "Mean: value"
-mean_value=$(awk '{printf "%.2f", int($1*100)/100}' "$mean_file")  # only take 2 decimals the 0.25 from 0.258 
+#mean_value=$(awk '{printf "%.2f", int($1*100)/100}' "$mean_file")  # only take 2 decimals the 0.25 from 0.258 
 
-if (( $(echo "$mean_value > 0.7" | bc -l) )); then   ### CAse like Mauna Loa with good coherence
-    mean_value=0.8
-fi
+mean_value=$(awk '{
+    v = int($1*100)/100
+    if (v > 0.7) printf "0.8"
+    else printf "%.2f", v
+}' "$mean_file")   ##### for cases with goood coherence set to 0.8 e.g. MaunaLoa
+
 
 
 # Clear output file if it exists

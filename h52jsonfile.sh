@@ -26,6 +26,6 @@ python data_to_json.py TS_GEOCml2mask/cum_filt.h5 "$OUTPUTFILT"
 # Si el primer argumento, ejecutar acción
 if [ -n "$1" ]; then
 	echo "Copiando"
-	scp -r $OUTPUT /work/scratch-pw3/licsar/alejobea/batchdir/VolcNet/jasmin_clones/${1}/
-	scp -r $OUTPUTFILT /work/scratch-pw3/licsar/alejobea/batchdir/VolcNet/jasmin_clones/${1}/
+	scp -r $OUTPUT /work/scratch-pw4/licsar/alejobea/batchdir/VolcNet/jasmin_clones/${1}/
+	scp -r $OUTPUTFILT /work/scratch-pw4/licsar/alejobea/batchdir/VolcNet/jasmin_clones/${1}/
 fi

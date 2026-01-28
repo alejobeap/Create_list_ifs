@@ -1,5 +1,5 @@
 nombre_volcan lon lat distancia
-
+"Atka Volcanic Complex" 52.331 -174.139 20
 Ebulobo 121.191 -8.817 20
 "Mauna Loa" -155.608 19.475 20
 Karangetang 125.407 2.781 20

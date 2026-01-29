@@ -146,7 +146,7 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
                 row_cima_rel = row_cima
                 col_cima_rel = col_cima
                 if not check_position_and_height(row_cima_rel, col_cima_rel):
-             #      raise ValueError("Coordenadas cima fuera de ventana o Elevacion cima es NaN")
+                   raise ValueError("Coordenadas cima fuera de ventana o Elevacion cima es NaN")
             
             # If we got here, h_cima is valid
             h_cima = elevation[row_cima_rel, col_cima_rel]

@@ -141,33 +141,15 @@ def get_base_distance_and_window(lon, lat, buffer_deg=0.2):
                 return True
             
             # First attempt with relative indices
-            #if not check_position_and_height(row_cima_rel, col_cima_rel):
+            if not check_position_and_height(row_cima_rel, col_cima_rel):
                 # Second attempt using absolute indices
-             #   row_cima_rel = row_cima
-             #   col_cima_rel = col_cima
-             #   if not check_position_and_height(row_cima_rel, col_cima_rel):
-             #       raise ValueError("Coordenadas cima fuera de ventana o Elevacion cima es NaN")
+                row_cima_rel = row_cima
+                col_cima_rel = col_cima
+                if not check_position_and_height(row_cima_rel, col_cima_rel):
+             #      raise ValueError("Coordenadas cima fuera de ventana o Elevacion cima es NaN")
             
             # If we got here, h_cima is valid
-            #h_cima = elevation[row_cima_rel, col_cima_rel]
-
-
-            # Verificar que la cima esté dentro de la ventana
-            if not (0 <= row_cima_rel < elevation.shape[0] and
-                    0 <= col_cima_rel < elevation.shape[1]):
-                raise ValueError("La cima cae fuera de la ventana de recorte")
-
-# Buscar altura máxima en vecindad 3x3
-            r0, c0 = row_cima_rel, col_cima_rel
-            window_cima = elevation[
-                max(0, r0-1):min(elevation.shape[0], r0+2),
-                max(0, c0-1):min(elevation.shape[1], c0+2)
-            ]
-
-            if np.all(np.isnan(window_cima)):
-                raise ValueError("La cima está rodeada de NaNs en el DEM")
-
-            h_cima = np.nanmax(window_cima)
+            h_cima = elevation[row_cima_rel, col_cima_rel]
 
 
             # Definir base como pixeles con elev <= percentil 10

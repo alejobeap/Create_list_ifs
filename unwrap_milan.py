@@ -22,7 +22,7 @@ process_ifg_pair(
     landmask_tif=None,
     magtif=None,
     ml=1,
-    fillby='gauss',  # 'none'
+    fillby='none',  # 'none' 'gauss'
     thres=0.2, #check
     cascade=True,
     smooth=False,

@@ -1,4 +1,26 @@
 nombre_volcan lon lat distancia
+Makaturing 7.644 124.317 20
+Latukan 7.654 124.438 20
+Ragang 7.691 124.507 20
+Kalatungan 7.95 124.8 20
+Musuan 7.877 125.068 20
+Malindang 8.22 123.63 20
+Balatukan 8.77 124.98 20
+Camiguin 9.203 124.673 20
+“Cuernos de Negros” 9.25 123.17
+"Amorong Group" 15.825 120.742 20
+"Santo Tomas" 16.33 120.55 20
+Patoc 17.147 120.98 20
+"Ambalatungan Group" 17.32 121.1
+Kalatungan 124.8 7.95 20
+Musuan 125.068 7.877 20
+Balatukan	124.98 8.77 20
+"Paco-Maniayao"	125.52 9.593 20
+Kalatungan 124.8 7.95 20
+Malindang	123.63 8.22 20
+Balatukan	124.98 8.77 20
+Camiguin 124.673 9.203 20
+“Cuernos de Negros”	123.17 9.25 20
 Mandalagan 123.25 10.65 20
 Silay 123.23 10.77 20
 Cabalían 125.218 10.285 20

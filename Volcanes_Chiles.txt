@@ -1,4 +1,8 @@
 nombre_volcan lon lat distancia
+"Gada Ale" 40.408 13.975 20
+"Manda Hararo" 40.820 12.170 20
+Asavyo 41.599 13.098 20
+"Alu-Dalafilla" 40.553 13.793 20 
 Parker 124.892 6.113 20
 Matutum 125.07 6.37 20
 Apo 125.269 6.989 20

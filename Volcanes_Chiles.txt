@@ -1,4 +1,25 @@
 nombre_volcan lon lat distancia
+Kanaga -177.16800 51.923 20
+"Great Sitkin" -176.13000 52.076 20
+Kasatochi -175.50800 52.177 20
+Gareloi -178.79401 51.790 20
+Tanaga -178.14600 51.885 20
+Takawangha -178.00600 51.873 20
+Bobrof -177.43800 51.910 20
+Moffett -176.74699 51.944 20
+Raung 114.056 -8.119 20
+Ijen 114.242 -8.058 20
+Kelud 112.314 -7.935 20
+"Arjuno-Welirang" 112.575 -7.733 20
+Penanggungan 112.620 -7.616 20
+"Malang Plain" 112.733 -8.067 20
+"Tengger Caldera" 112.950 -7.942 20
+Lamongan 113.341 -7.981 20
+Lurus 113.580 -7.739 20
+Baluran 114.370 -7.850 20
+"Iyang-Argapura" 113.570 -7.970 20
+Ijen 114.242 -8.058 20
+"Guagua Pichincha" -78.598 -0.171 20 
 "Gada Ale" 40.408 13.975 20
 "Manda Hararo" 40.820 12.170 20
 Asavyo 41.599 13.098 20

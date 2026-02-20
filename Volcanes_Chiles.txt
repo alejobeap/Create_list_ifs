@@ -1,4 +1,15 @@
 nombre_volcan lon lat distancia
+Hertali 40.33 9.78 20
+"Liado Hayk" 40.28 9.57 20
+Dofan 40.13 9.35 20
+Beru 39.75 8.95 20
+Kone 39.701 8.788 20
+Boset-Bericha 39.475 8.558 20
+"Bishoftu Volcanic Field" 38.98 8.78 20
+Sodore 39.35 8.43 20
+Gedamsa 39.188 8.357 20
+Bora-Bericcio 39.05 8.221 20
+"Tullu Moye" 39.137 8.159 20
 Kanaga -177.16800 51.923 20
 "Great Sitkin" -176.13000 52.076 20
 Kasatochi -175.50800 52.177 20

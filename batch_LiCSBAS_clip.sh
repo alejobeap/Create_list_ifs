@@ -42,7 +42,8 @@ freq="" # default: 5.405e9 Hz
 
 maxheigh=$(awk '{print $1}' *_heigh.txt | sort -nr | head -1)
 minheigh=$(awk '{print $2}' *_heigh.txt | sort -nr | head -1)
-clipinfo=$(awk '{print $3}' *_heigh.txt | sort -nr | head -1)
+#clipinfo=$(awk '{print $3}' *_heigh.txt | sort -nr | head -1)
+clipinfo=$(awk '{print $1}' clip_file*.txt | sort -nr | head -1)
 ### Running the updated pipelines:
 run_reunwrapping='n' # y/n. default: 'n'. Reunwrapping would use 02to05 script instead of the original 02[,03,04,05]
 
@@ -50,7 +51,7 @@ run_reunwrapping='n' # y/n. default: 'n'. Reunwrapping would use 02to05 script i
 order_op03_05="05 04 03"	# can change order e.g., 05 03 04
 do03op_GACOS="n"	# y/n
 do04op_mask="y"	# y/n
-do05op_clip="n"	# y/n
+do05op_clip="y"	# y/n
 p04_mask_coh_thre_avg="0.1"	# e.g. 0.2
 p04_mask_coh_thre_ifg=""	# e.g. 0.2
 p04_mask_range=""	# e.g. 10:100/20:200 (ix start from 0)

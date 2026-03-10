@@ -591,8 +591,162 @@ class ifg_timeseries():
 #%%
 
 
+def LiCSBAS_to_LiCSAlert(
+        LiCSBAS_out_folder,
+        filtered=False,
+        figures=False,
+        crop_pixels=None,
+        mask_type='licsbas',
+        date_start=None,
+        date_end=None
+    ):
+    """
+    Nueva versión reimplementada de LiCSBAS_to_LiCSAlert
+    con soporte de máscaras tipo JSON:
+        - 'licsbas'      → agua + incoherente + nan_once
+        - 'nan_once'     → solo píxeles que alguna vez son nan
+        - 'nan_variable' → nan independiente por época
+        - 'dem'          → máscara DEM como antes
 
-def LiCSBAS_to_LiCSAlert(LiCSBAS_out_folder, filtered = False, figures = False,
+    Compatible con LiCSAlert.
+    """
+
+    import numpy as np
+    import numpy.ma as ma
+    import h5py
+    import os
+    from pathlib import Path
+
+    # ============================
+    # 1. Localizar carpetas LiCSBAS
+    # ============================
+    LiCSBAS_out_folder = Path(LiCSBAS_out_folder)
+    contents = os.listdir(LiCSBAS_out_folder)
+    ts_folder = [d for d in contents if d.startswith("TS_")][0]
+    ts_path = LiCSBAS_out_folder / ts_folder / "results"
+
+    # ============================
+    # 2. Abrir archivo HDF5
+    # ============================
+    h5name = "cum_filt.h5" if filtered else "cum.h5"
+    with h5py.File(LiCSBAS_out_folder / ts_folder / h5name, "r") as f:
+        cumulative_r3 = f["cum"][()] * 0.001  # mm → m
+        dates = f["imdates"][()].astype(str).tolist()
+
+        # obtener info de referencia
+        ref_area_str = f["refarea"][()]
+        if not isinstance(ref_area_str, str):
+            ref_area_str = ref_area_str.decode()
+        x1, x2 = map(int, ref_area_str.split("/")[0].split(":"))
+        y1, y2 = map(int, ref_area_str.split("/")[1].split(":"))
+        ref_xy = {"x_start": x1, "x_stop": x2, "y_start": y1, "y_stop": y2}
+
+        # geocodificación
+        corner_lon = f["corner_lon"][()]
+        corner_lat = f["corner_lat"][()]
+        post_lon = f["post_lon"][()]
+        post_lat = f["post_lat"][()]
+
+    # dimensiones
+    n_im, length, width = cumulative_r3.shape
+
+    # ============================
+    # 3. Referenciar series en tiempo (igual JSON)
+    # ============================
+    def time_reference(cube, ref_box):
+        xs, xe = ref_box["x_start"], ref_box["x_stop"]
+        ys, ye = ref_box["y_start"], ref_box["y_stop"]
+        offsets = np.nanmean(cube[:, ys:ye, xs:xe], axis=(1, 2))
+
+        # corregir si existe nan: escoger pixel cercano no nan
+        if np.isnan(offsets).any():
+            nan_map = np.isnan(cube).any(axis=0)
+            valid = np.argwhere(~nan_map)
+            cy = (ys + ye) // 2
+            cx = (xs + xe) // 2
+            center = np.array([cy, cx])
+            dists = np.linalg.norm(valid - center, axis=1)
+            ny, nx = valid[np.argmin(dists)]
+            ref_box = {"x_start": nx, "x_stop": nx + 1,
+                       "y_start": ny, "y_stop": ny + 1}
+            offsets = np.nanmean(cube[:, ny:ny+1, nx:nx+1], axis=(1, 2))
+
+        corr = cube - offsets[:, None, None]
+        return corr, ref_box
+
+    cumulative_r3, ref_xy = time_reference(cumulative_r3, ref_xy)
+
+    # ============================
+    # 4. Leer DEM y máscara LiCSBAS
+    # ============================
+    from numpy import float32
+
+    def read_flat(path, nx, ny, dtype=float32):
+        return np.fromfile(path, dtype=dtype).reshape((nx, ny))
+
+    dem = read_flat(ts_path / "hgt", length, width)
+    lics_mask_img = read_flat(ts_path / "mask", length, width)
+
+    # ============================
+    # 5. Crear máscaras estilo JSON
+    # ============================
+    # Agua (valores <0), incoherencia (=0)
+    mask_water = (lics_mask_img < 0)
+    mask_incoh = (lics_mask_img == 0)
+
+    # nan por época
+    nan_r3 = np.isnan(cumulative_r3)
+    nan_once = np.any(nan_r3, axis=0)
+
+    if mask_type == "licsbas":
+        mask_2d = mask_water | mask_incoh | nan_once
+        mask_r3 = np.repeat(mask_2d[None, :, :], n_im, axis=0)
+
+    elif mask_type == "nan_once":
+        mask_2d = nan_once
+        mask_r3 = np.repeat(mask_2d[None, :, :], n_im, axis=0)
+
+    elif mask_type == "nan_variable":
+        mask_r3 = nan_r3.copy()
+        mask_2d = np.any(mask_r3, axis=0)
+
+    elif mask_type == "dem":
+        mask_2d = np.isnan(dem)
+        mask_r3 = np.repeat(mask_2d[None, :, :], n_im, axis=0)
+
+    else:
+        raise ValueError("mask_type inválido")
+
+    # ============================
+    # 6. Aplicar máscaras
+    # ============================
+    cum_ma = ma.array(cumulative_r3, mask=mask_r3)
+    dem_ma = ma.array(dem, mask=mask_2d)
+
+    # ============================
+    # 7. Construir mallas lon/lat
+    # ============================
+    xs = corner_lon + post_lon * np.arange(width)
+    ys = corner_lat + post_lat * np.arange(length)
+    lons_mg, lats_mg = np.meshgrid(xs, ys)
+
+    # ============================
+    # 8. Salida
+    # ============================
+    displacement = {
+        "cum_ma": cum_ma,
+        "mask": mask_r3,
+        "dem": dem_ma,
+        "lons_mg": lons_mg,
+        "lats_mg": lats_mg,
+    }
+
+    tinfo = {"acq_dates": dates}
+
+    return displacement, tinfo, ref_xy
+            
+
+def LiCSBAS_to_LiCSAlert2(LiCSBAS_out_folder, filtered = False, figures = False,
                          n_cols=5, crop_pixels = None, mask_type = 'dem', 
                          date_start = None, date_end = None,
                          draw_manual_mask = None):
